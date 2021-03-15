@@ -1,2 +1,2 @@
 # trading
-python codes for automatic trading strategies
+Fortran codes for automatic trading strategies
