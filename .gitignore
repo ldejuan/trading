@@ -129,9 +129,6 @@ dmypy.json
 .pyre/
 
 # fortran
-*.f
-*.for
-*.o
 *.xlsm
 *.txt
 src/simul
