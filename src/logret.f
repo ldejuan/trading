@@ -1,7 +1,7 @@
       subroutine logret(ib, ka, ji, jo, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
-c  ret.f : function to calculate  the asset log returns over a period²e
+c  logret.f : function to calculate  the asset log returns over a period²e
 c           from a given asset time series
 c
 c equation : 

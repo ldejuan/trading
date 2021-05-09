@@ -16,8 +16,8 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       character*80 assetfilename /'../data/ldo_im.csv'/ 
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
       integer jopen,jhigh,jlow,jclose,jpdiv,jemast,jemalg,jret,jrbs
-      integer jcrs,jrst,jnav
-      integer nst,nlg
+      integer jlret,jcrs,jrst,jnav,jyret 
+      integer nst,nlg,nyr
       logical long
       real ast,alg,chg
       data chg /1.e-5/
@@ -27,6 +27,7 @@ c
 c env : global environnement with all the data 
 c     env(i,j,k): i: bars, j: proprietes, k: asset
 c
+      
       real env(1:imax,1:jmax,1:kmax)
       character dates(1:imax,1:kmax)*10
       common /cfile/ird
@@ -49,6 +50,8 @@ c
           call retcond(i,k,jret,jcrs,jrst,chg,env,imax,jmax,kmax)
           call rebase(i,k,jret,jrbs,nlg,env,imax,jmax,kmax)
           call rebase(i,k,jrst,jnav,nlg,env,imax,jmax,kmax)
+          call logret(i,k,jpdiv,jlret,env,imax,jmax,kmax)
+          call rollma(nyr,i,k,jlret,jyret,env,imax,jmax,kmax) 
         enddo
       enddo
       call print_env(1,env,dates,imax,jmax,kmax)
