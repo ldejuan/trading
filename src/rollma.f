@@ -33,17 +33,13 @@ c    position of the env variable
       integer ip
       real env(ix,jx,kx),alpha,res
 c calculate previous bar
-      alpha = 1./nbars
-      ip=ib-1
-      if (ib .eq. 1)
+      if (ib .eq. 1) then
         res = env(ib,ji,ka)
+      else if (ib .lt. nbars) then 
+        res = (1. - 1./ib) * env(ib-1,jo,ka) + 1./ib * env(ib,ji,ka)
       else
-      
-        if (ib .lt. nbars) 
-          res = (1. - 1./ib) * env(ip,jo,ka) + 1./ib * env(ib,ji,ka)
-        else
-          res =  env(ip,jo,ka) + alpha * (env(ib,ji,ka) - env(nb-nbars+1,ji,ka)          
-        endif
+        alpha = 1./nbars
+        res =  env(ib-1,jo,ka) + alpha * (env(ib,ji,ka) - env(ib-nbars+1,ji,ka))          
       endif
 
       env(ib,jo,ka) = res
