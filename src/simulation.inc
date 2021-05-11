@@ -1,8 +1,8 @@
-      parameter(imax=2072,jmax=14, kmax=1)
+      parameter(imax=2072,jmax=17, kmax=1)
       parameter(nn=2072,mm=5,kk=1,irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5, jemast=6, jemalg=7)
       parameter(jcrs=8, jret=9,jrbs=10,jrst=11,jnav=12,jlret=13)
-      parameter(jyret=14)
+      parameter(jyret=14, jsqr=15,jmtw=16,jyvol=17)
       parameter(nst=20, nlg=100)
       parameter(long=.true.)
       parameter(nyr = 252)
@@ -28,7 +28,10 @@
   ! jrst  : index of the return of the strategy (long/short)
   ! jnav  : index of the nav (over 100) of the strategy
   ! jlret : index of the log of returns 
-  ! jyret : index of the yearly returns 
+  ! jyret : index of the yearly returns
+  ! jsqr  : index of the square of the return (r*r)
+  ! jmtw  : index of the second order moment of the returns
+  ! jyvol : index of the yearly volatility as stdv
   ! nst   : number of days for the short moving average
   ! nlg   : number of days for the long moving average
   ! nyr   : number of bars in a year

@@ -16,10 +16,11 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       character*80 assetfilename /'../data/ldo_im.csv'/ 
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
       integer jopen,jhigh,jlow,jclose,jpdiv,jemast,jemalg,jret,jrbs
-      integer jlret,jcrs,jrst,jnav,jyret 
+      integer jlret,jcrs,jrst,jnav,jyret,jsqr,jmtw,jyvol 
       integer nst,nlg,nyr
       logical long
-      real ast,alg,chg
+      real ast,alg,chg,square,stdev
+      external square,stdev
       data chg /1.e-5/
       logical ier
       include "simulation.inc"
@@ -39,8 +40,11 @@ c
 c
 c start of the simulation 
 c
+      write(*,*) square(2.)
       ast = 2./(1. + nst)
       alg = 2./(1. + nlg) 
+      write(*,*) env(1,13,1)
+      write(*,*) 'in main.f'
       do i=1,imax
         do k=1,kmax
           call ema(ast, i, k, jclose, jemast, env, imax, jmax, kmax)
@@ -51,8 +55,13 @@ c
           call rebase(i,k,jret,jrbs,nlg,env,imax,jmax,kmax)
           call rebase(i,k,jrst,jnav,nlg,env,imax,jmax,kmax)
           call logret(i,k,jpdiv,jlret,env,imax,jmax,kmax)
-          call rollma(nyr,i,k,jlret,jyret,env,imax,jmax,kmax) 
+          call rollma(nyr,i,k,jlret,jyret,env,imax,jmax,kmax)
+          call unary(square, i,k,jlret,jsqr,env,imax,jmax,kmax)
+          call rollma(nyr,i,k,jsqr,jmtw,env,imax,jmax,kmax)
+          call binary(stdev,i,k,jmtw,jlret,jyvol,env,imax,jmax,kmax)
         enddo
       enddo
+    
       call print_env(1,env,dates,imax,jmax,kmax)
+
       end program
