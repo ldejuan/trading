@@ -31,7 +31,7 @@
   ! jyret : index of the yearly returns
   ! jsqr  : index of the square of the return (r*r)
   ! jmtw  : index of the second order moment of the returns
-  ! jyvol : index of the yearly volatility as stdv
+  ! jyvol : index of the yearly volatility as stdev
   ! nst   : number of days for the short moving average
   ! nlg   : number of days for the long moving average
   ! nyr   : number of bars in a year

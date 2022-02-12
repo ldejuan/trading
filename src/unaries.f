@@ -28,8 +28,8 @@ c
       implicit none
       real x,y,factor,stdev
 
-c     factor = 1/sqrt(252)*(252-1)/252
-      parameter (factor=0.06274410233155821) 
+c     factor = sqrt(252)**(252-1)/252
+      parameter (factor=15.811513787553) 
       stdev = sqrt(x-y*y)*factor
       return
       end

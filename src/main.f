@@ -40,11 +40,8 @@ c
 c
 c start of the simulation 
 c
-      write(*,*) square(2.)
       ast = 2./(1. + nst)
       alg = 2./(1. + nlg) 
-      write(*,*) env(1,13,1)
-      write(*,*) 'in main.f'
       do i=1,imax
         do k=1,kmax
           call ema(ast, i, k, jclose, jemast, env, imax, jmax, kmax)
