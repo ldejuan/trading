@@ -17,6 +17,4 @@ simul: $(OBJECTS0) $(OBJECTS1)
 clean:
 	rm -f *.o
 
-#install: sixs
-#	mkdir -p /usr/local/bin
-#	cp $< /usr/local/bin/sixs
+
