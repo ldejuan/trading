@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+    gcc:
+        image: gcc:latest
+        container_name: gcc
+        command: /bin/bash
+        volumes:
+            - c:\users\ldejuan\work\aaData\home:/root
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.25'
+                    memory: '100m'

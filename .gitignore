@@ -137,3 +137,5 @@ src/simul
 *.swp
 #librairies
 *.o
+# ignore app directory
+**/app
