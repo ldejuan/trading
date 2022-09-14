@@ -1,9 +1,9 @@
-      parameter(imax=2072,jmax=17, kmax=1)
-      parameter(nn=2072,mm=5,kk=1,irdx=10,iwrx=0)
+      parameter(imax=8258,jmax=17, kmax=1)
+      parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5, jemast=6, jemalg=7)
       parameter(jcrs=8, jret=9,jrbs=10,jrst=11,jnav=12,jlret=13)
       parameter(jyret=14, jsqr=15,jmtw=16,jyvol=17)
-      parameter(nst=20, nlg=100)
+      parameter(nst=20, nlg=150)
       parameter(long=.true.)
       parameter(nyr = 252)
 
@@ -22,8 +22,8 @@
   ! jpdiv : index of dividend reinvested in a bar
   ! jemast: index of the short moving average
   ! jemalg: index of the long moving average
-  ! jcrs  : iundex of the single cross strategy
-  ! jret  : index of the price with dividend return
+  ! jcrs  : index of the single cross indicator strategy
+  ! jret  : index of the return of the dividend corrected price
   ! jrbs  : index of the asset return on 100 initial price
   ! jrst  : index of the return of the strategy (long/short)
   ! jnav  : index of the nav (over 100) of the strategy

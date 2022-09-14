@@ -1,4 +1,6 @@
-      subroutine retcond(ib, ka, jrt, jid, jo, chg, env, ix, jx, kx)  
+      subroutine retcond(chg, jid,  jrt, jo, ib, ka, env, ix, jx, kx)
+                        
+
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ema.f : function to calculate the return over a conditional indicator
@@ -9,14 +11,15 @@ c     condret(i) = ret(i)*ind(i-1)
 c                  ENSURE CAUSALITY : return from i-1 to i, with
 c                  position(ind) at i-1 ! 
 c
-c inputs :   
+c inputs :
+c     chg    :real       : cost of a entry - sold position
+c     jid   : integer   :index of the indicator position
+c 
 c     ib     : integer   :time bar to be calculated
 c     ka     : integer   :index of the asset
 c     jrt   : integer   :index of the asset return 
-c     jid   : integer   :index of the indicator position  
 c     jo     :integer    :index of the output (where the conditional
 c                          return will be stored )
-c     chg    :real       : cost of a entry - sold position 
 c     env   :real(ix,jx,kx)
 c                       : environnement of the simulation
 c     ix  : integer   : row dimension of the env variables

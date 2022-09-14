@@ -1,4 +1,4 @@
-      subroutine ret(ib, ka, ji, jo, env, ix, jx, kx)  
+      subroutine ret( ji, jo, ib, ka,env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ret.f : function to calculate  the period asset returns over a period²e

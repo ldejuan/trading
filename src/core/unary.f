@@ -1,4 +1,4 @@
-      subroutine unary(func, ib, ka, ji, jo, env, ix, jx, kx)  
+      subroutine unary(func,  ji, jo, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  unary.f : implements a call to a func of type unary f(x) 

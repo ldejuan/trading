@@ -1,4 +1,4 @@
-      subroutine rollma(nbars,ib, ka, ji, jo, env, ix, jx, kx)  
+      subroutine rollma(nbars,ji, jo, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ret.f : function to calculate rolling moving average of a time series 

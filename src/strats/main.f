@@ -13,7 +13,7 @@ c  assetfilename : name of the file to open
 c  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      character*80 assetfilename /'../data/ldo_im.csv'/ 
+      character*80 assetfilename /'../data/cac40_index.csv'/ 
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
       integer jopen,jhigh,jlow,jclose,jpdiv,jemast,jemalg,jret,jrbs
       integer jlret,jcrs,jrst,jnav,jyret,jsqr,jmtw,jyvol 
@@ -44,18 +44,19 @@ c
       alg = 2./(1. + nlg) 
       do i=1,imax
         do k=1,kmax
-          call ema(ast, i, k, jclose, jemast, env, imax, jmax, kmax)
-          call ema(alg, i, k, jclose, jemalg, env, imax, jmax, kmax)
-          call indcross(i,k,jemast,jemalg,jcrs,long,env,imax,jmax,kmax)
-          call ret(i,k,jpdiv,jret,env,imax,jmax,kmax)
-          call retcond(i,k,jret,jcrs,jrst,chg,env,imax,jmax,kmax)
-          call rebase(i,k,jret,jrbs,nlg,env,imax,jmax,kmax)
-          call rebase(i,k,jrst,jnav,nlg,env,imax,jmax,kmax)
-          call logret(i,k,jpdiv,jlret,env,imax,jmax,kmax)
-          call rollma(nyr,i,k,jlret,jyret,env,imax,jmax,kmax)
-          call unary(square, i,k,jlret,jsqr,env,imax,jmax,kmax)
-          call rollma(nyr,i,k,jsqr,jmtw,env,imax,jmax,kmax)
-          call binary(stdev,i,k,jmtw,jlret,jyvol,env,imax,jmax,kmax)
+          call ema(ast, jclose, jemast, i, k, env, imax, jmax, kmax)
+          call ema(alg, jclose, jemalg, i, k, env, imax, jmax, kmax)
+          call indcross(long, jemast, jemalg, jcrs, i, k, env, imax, jmax, kmax)
+          call ret(jpdiv,jret,i,k,env,imax,jmax,kmax)
+          call retcond(chg, jcrs,jret, jrst,i,k,env,imax,jmax,kmax)
+c          (chg, jid, ib, ka, jrt, jo, env, ix, jx, kx)
+c          call rebase(i,k,jret,jrbs,nlg,env,imax,jmax,kmax)
+c          call rebase(i,k,jrst,jnav,nlg,env,imax,jmax,kmax)
+c          call logret(i,k,jpdiv,jlret,env,imax,jmax,kmax)
+c          call rollma(nyr,i,k,jlret,jyret,env,imax,jmax,kmax)
+c          call unary(square, i,k,jlret,jsqr,env,imax,jmax,kmax)
+c          call rollma(nyr,i,k,jsqr,jmtw,env,imax,jmax,kmax)
+c          call binary(stdev,i,k,jmtw,jlret,jyvol,env,imax,jmax,kmax)
         enddo
       enddo
     

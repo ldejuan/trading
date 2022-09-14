@@ -1,4 +1,4 @@
-      subroutine logrebase(ib, ka, ji, jo, ist, env, ix, jx, kx)  
+      subroutine logrebase(ji, jo, ist, ib, ka,env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  rebase.f : function to calculate  the total return of an asset 

@@ -1,4 +1,4 @@
-      subroutine vol(depth, ib, ka, jret, jvol, env, ix, jx, kx)  
+      subroutine vol(depth, jret, jvol, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  vol.f : function to calculate the volatility  

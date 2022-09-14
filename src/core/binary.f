@@ -1,4 +1,4 @@
-      subroutine binary(func, ib, ka, ji1, ji2, jo, env, ix, jx, kx)  
+      subroutine binary(func, ji1, ji2, jo, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  unary.f : implements a call to a func of type binray f(x,y) 

@@ -1,4 +1,4 @@
-      subroutine indcross(ib, ka, jst, jlg, jo, long, env, ix, jx, kx)  
+      subroutine indcross(long, jst, jlg, jo, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ema.f : function to calculate a single cross indicator of two moving

@@ -1,4 +1,4 @@
-      subroutine logret(ib, ka, ji, jo, env, ix, jx, kx)  
+      subroutine logret( ji, jo, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  logret.f : function to calculate  the asset log returns over a period²e
