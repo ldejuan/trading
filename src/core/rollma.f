@@ -1,4 +1,4 @@
-      subroutine rollma(nbars,ji, jo, ib, ka, env, ix, jx, kx)  
+      subroutine rollma(nbars, ji, jo, ib, ka, env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ret.f : function to calculate rolling moving average of a time series 
@@ -10,20 +10,20 @@ c     rollma(ib,nd) = rollma(ib-1,nd) + 1./nbarsn * (x(ib) - x(ib-nd+1)
 c     if ib <= nb : 
 c     rollma(ib,nd) = (1-1/ib)*rollma(ib,nb) + 1/ib * x(ib)
 c
-c inputs :   
-c     ib     : integer   :time bar to be calculated
-c     nbars  : integer   :number of periods (nbars)of the rolling 
-c     ka     : integer   :index of the asset
-c     ji     : integer   :index of the timeseriese 
-c     jo     :integer    :index of the output (where the return will be
+c inputs :
+c     nbars :integer  :number of periods (nbars)of the rolling 
+c     ji    :integer  :column index of the timeseries (prices) 
+c     jo    :integer  :colmun index of the output (where the return will be
 c                         stored
+c     ib    :integer  :row time bar to be calculated
+c     ka    :integer  :depth index of the asset
 c     env   :real(ix,jx,kx)
 c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
+c     ix    :integer  :row dimension of the env variables
 c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
+c     jx    :integer  :colunm dimension of the env variable
 c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
+c     kx    :integer  :depth dimenstion of the env variable
 c                         (total number of assets)
 c outputs :
 c    the value of the return at ib is stored in the jo, ka

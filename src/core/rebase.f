@@ -1,4 +1,4 @@
-      subroutine rebase( ji, jo, ist, ib, ka, env, ix, jx, kx)  
+      subroutine rebase(ist, ji, jo, ib, ka, env, ix, jx, kx)
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  rebase.f : function to calculate  the total return of an asset 
@@ -10,20 +10,20 @@ c      if i > ist
 c          rebase(i) = rebase(i-1)(1. + ret(i)) 
 c     else rebase(i) = 100.
 c
-c inputs :   
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     ji     : integer   :index of the return over the period i-1,i  
-c     jo     : integer   :index of the output (where the reabase
+c inputs :
+c     ist  :integer  :row start date as an index to calculate the rebase at 100:
+c     ib   :integer  :row time bar to be calculated
+c     ka   :integer  :depth index of the asset
+c     ji   :integer  :column index of the return over the period i-1,i  
+c     jo   :integer  :column index of the output (where the reabase
 c                         price will be stored
-c     ist    : integer    : start date to calculate the rebase at 100:
-c     env   :real(ix,jx,kx)
+c     env  :real(ix,jx,kx) 
 c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
+c     ix  :integer   :row dimension of the env variables
 c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
+c     jx  :integer   :colunm dimension of the env variable
 c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
+c     kx  :integer   :depth dimenstion of the env variable
 c                         (total number of assets)
 c outputs :
 c    the value of the return at ib is stored in the jo, ka

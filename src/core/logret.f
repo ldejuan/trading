@@ -1,4 +1,4 @@
-      subroutine logret( ji, jo, ib, ka, env, ix, jx, kx)  
+      subroutine logret( ji, jo, ib, ka, env, ix, jx, kx)
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  logret.f : function to calculate  the asset log returns over a period²e
@@ -9,11 +9,11 @@ c     return(i) = log(price(i)/price(i-1))
 c
 c
 c inputs :   
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     ji     : integer   :index of the price 
-c     jo     :integer    :index of the output (where the return will be
+c     ji     :integer   :column index of the price 
+c     jo     :integer    :column index of the output (where the return will be
 c                         stored
+c     ib     : integer   :row time bar to be calculated
+c     ka     : integer   :depth index of the asset
 c     env   :real(ix,jx,kx)
 c                       : environnement of the simulation
 c     ix  : integer   : row dimension of the env variables

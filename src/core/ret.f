@@ -1,4 +1,4 @@
-      subroutine ret( ji, jo, ib, ka,env, ix, jx, kx)  
+      subroutine ret(ji, jo, ib, ka,env, ix, jx, kx)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ret.f : function to calculate  the period asset returns over a period²e
@@ -9,18 +9,18 @@ c     return(i) = price(i)/price(i-1) - 1.
 c
 c
 c inputs :   
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     ji     : integer   :index of the price 
-c     jo     :integer    :index of the output (where the return will be
+c     ji  :integer  :colunm index of the price 
+c     jo  :integer  :colunm index of the output (where the return will be
 c                         stored
-c     env   :real(ix,jx,kx)
-c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
+c     ib  :integer  :row time bar to be calculated
+c     ka  :integer  :depth index of the asset
+c     env :real(ix,jx,kx)
+c                   :environnement of the simulation
+c     ix  :integer  :row dimension of the env variables
 c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
+c     jx  :integer  :colunm dimension of the env variable
 c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
+c     kx  :integer  :depth dimenstion of the env variable
 c                         (total number of assets)
 c outputs :
 c    the value of the return at ib is stored in the jo, ka

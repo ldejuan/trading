@@ -12,21 +12,20 @@ c                  ENSURE CAUSALITY : return from i-1 to i, with
 c                  position(ind) at i-1 ! 
 c
 c inputs :
-c     chg    :real       : cost of a entry - sold position
-c     jid   : integer   :index of the indicator position
-c 
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     jrt   : integer   :index of the asset return 
-c     jo     :integer    :index of the output (where the conditional
+c     chg   :real    :cost of a entry - sold position in unit of returns
+c     jid   :integer :column index of the indicator position
+c     jrt   :integer :column index of the asset return 
+c     jo    :integer :column index of the output (where the conditional
 c                          return will be stored )
+c     ib    :integer :time bar to be calculated
+c     ka    :integer :depth index of the asset
 c     env   :real(ix,jx,kx)
 c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
+c     ix  : integer   :row dimension of the env variables
 c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
+c     jx  : integer   :colunm dimension of the env variable
 c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
+c     kx  : integer   :depth dimenstion of the env variable
 c                         (total number of assets)
 c outputs :
 c    the value of the ema at ib is stored in the jo, ka

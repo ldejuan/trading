@@ -10,19 +10,19 @@ c
 c      alpha = 2/(N+1) for N terms in a moving average
 c
 c inputs :   
-c     alpha  : real      :parameter of ema (from 0 to 1)
-c     ji     : integer   :index of the price 
-c     jo     :integer    :index of the output (where the ema will be
+c     alpha:real    :parameter of ema (from 0 to 1)
+c     ji   :integer :column index of the price 
+c     jo   :integer :column index of the output (where the ema will be
 c                         stored
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     env   :real(ix,jx,kx)
+c     ib  :integer  :row time bar to be calculated
+c     ka  :integer  :depth index of the asset
+c     env :real(ix,jx,kx)
 c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
+c     ix  :integer  :row dimension of the env variables
 c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
+c     jx  :integer  :colunm dimension of the env variable
 c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
+c     kx  :integer  :depth dimenstion of the env variable
 c                         (total number of assets)
 c outputs :
 c    the value of the ema at ib is stored in the jo, ka
