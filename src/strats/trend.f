@@ -17,7 +17,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/ 
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
-      integer jopen,jhigh,jlow,jclose,jpdiv,jret
+      integer jopen,jhigh,jlow,jclose,jpdiv,jret,jals,jtrd
       integer ientps, ientpe, npole, ndepth, nperiod
       logical ier
       real xms,fq, evlmem
@@ -38,7 +38,9 @@ c
       call load_asset(assetfilename,env, dates, nn,mm,kk, kmax)
 c calculation of the returns  
       do i=1,imax
-        call ret(jpdiv, jret, i, 1, env, imax, jmax, kmax)
+        call ret(i, env(1,jret,kk), env(1,jpdiv,kk), imax)
+        call aliasing(i, env(1,jals,kk), env(1,jpdiv, kk), imax)
+        call detrend(i, env(1,jtrd,kk), env(1,jals, kk), imax)        
       enddo
 
 c calculation of the maximum entropy spectrum for one window
@@ -52,7 +54,7 @@ c calculate the spectrum
       do i=nperiod, 2, -1
         fq = 1./ real(i)
         spectrum(i,1) = fq
-        spectrum(i,2) = evlmem(fq,coefs,npole,xms)
+        spectrum(i,2) = evlmem(fq,coefs,npole,1.)
         write(*,*) i, spectrum(i,1), spectrum(i,2)
       enddo
 

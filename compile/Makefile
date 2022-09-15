@@ -12,9 +12,9 @@ NRPATH = ${HOME}/trading/src/nr
 
 COREOBJ = load_asset.o print_error.o ema.o print_env.o \
 	 ret.o rebase.o indcross.o retcond.o logret.o rollma.o unaries.o \
-	 unary.o binary.o
+	 unary.o binary.o detrend.o aliasing.o
 
-NROBJ = gammln.o memcof.o evlmem.o
+NROBJ = gammln.o memcof.o evlmem.o 
 
 SRCOBJ = main.o 
 
