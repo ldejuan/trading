@@ -15,13 +15,18 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/ 
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
-      integer jopen,jhigh,jlow,jclose,jpdiv,jemast,jemalg,jret,jrbs
-      integer jlret,jcrs,jrst,jnav,jyret,jsqr,jmtw,jyvol 
-      integer nst,nlg,nyr
+      integer jopen, jhigh, jlow, jclose,jpdiv
+      integer jemast, jemalg 
+      integer jret, jnav
+      integer jcrs, jrst, jnavs 
+      integer jvol 
+      integer nst,nlg,nyr, nbdays
       logical long
-      real ast,alg,chg,square,stdev
+      real ast,alg,chg,square,stdev, slip
       external square,stdev
       data chg /1.e-5/
+      data slip /0.0/
+      data nbdays /252/
       logical ier
       include "simulation.inc"
 c
@@ -44,19 +49,14 @@ c
       alg = 2./(1. + nlg) 
       do i=1,imax
         do k=1,kmax
-          call ema(ast, jclose, jemast, i, k, env, imax, jmax, kmax)
-          call ema(alg, jclose, jemalg, i, k, env, imax, jmax, kmax)
-          call indcross(long, jemast, jemalg, jcrs, i, k, env, imax, jmax, kmax)
-          call ret(jpdiv,jret,i,k,env,imax,jmax,kmax)
-          call retcond(chg, jcrs,jret, jrst,i,k,env,imax,jmax,kmax)
-          call rebase(nlg, jret,jrbs,i,k,env,imax,jmax,kmax)
-          call rebase(nlg, jrst,jnav,i,k,env,imax,jmax,kmax)
-c rolling volatility calculation
-          call logret(jpdiv, jlret,i,k,env,imax,jmax,kmax) 
-          call rollma(nyr,jlret,jyret,i,k,env,imax,jmax,kmax)
-c          call unary(square, i,k,jlret,jsqr,env,imax,jmax,kmax)
-c          call rollma(nyr,i,k,jsqr,jmtw,env,imax,jmax,kmax)
-c          call binary(stdev,i,k,jmtw,jlret,jyvol,env,imax,jmax,kmax)
+          call ema(ast, i, env(1,jemast,k) , env(1, jclose, k), imax)
+          call ema(alg, i, env(1,jemalg,k) , env(1, jclose, k), imax)
+          call indcross(long, i, env(1,jcrs,k), env(1,jemalg,k), env(1,jemast,k), imax)
+          call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)
+          call rebase(nlg, i, env(1,jnav,k), env(1, jret,k),imax)
+          call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k), imax)
+          call rebase(nlg, i, env(1, jnavs,k), env(1, jrst, k), imax)
+          call vol(nbdays,i, env(1,jvol,k), env(1,jret,k), imax)          
         enddo
       enddo
     

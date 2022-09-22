@@ -1,4 +1,4 @@
-      subroutine logrebase(ji, jo, ist, ib, ka,env, ix, jx, kx)  
+      subroutine logrebase(ist, i, ys, xlgrets, ix)   
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  rebase.f : function to calculate  the total return of an asset 
@@ -7,39 +7,28 @@ c           from a given asset log return timeseries
 c
 c equation : 
 c      if i > ist
-c          logrebase(i) = logrebase(i-1) * exp(logret(i)) 
-c     else logrebase(i) = 100.
-      
+c          ys(i) = ys(i-1) * exp(logret(i)) 
+c     else ys(i) = 100.      
 c
 c inputs :   
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     ji     : integer   :index of the log return over the period i-1,i  
-c     jo     : integer   :index of the output (where the reabase
-c                         price will be stored
-c     ist    : integer    : start date to calculate the rebase at 100:
-c     env   :real(ix,jx,kx)
-c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
-c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
-c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
-c                         (total number of assets)
+c     i        : integer   : time bar to be calculated
+c     ist      : integer   : start date to calculate the rebase at 100:
+c     ys       : real(ix)  : vector of outputs : to store the output values
+c     xlgrets  : real(ix)  : vector of log returns  
+c     ix       : integer   : row dimension of the inputs timeseries
 c outputs :
-c    the value of the return at ib is stored in the jo, ka
-c    position of the env variable
+c    the value of the return at i is stored in the ys(i) 
       implicit none
-      integer ib,ka,ji,jo,ix,jx,kx,ist
+      integer i,ist,ix
       integer ip
-      real env(ix,jx,kx)
+      real ys(ix),xlgrets(ix)
 c
 c calculate previous bar
 c
-      ip=ib-1
-      if (ib .le. ist) then
-        env(ib,jo,ka) = 100. 
+      if (i .le. ist) then
+        ys(i) = 100. 
       else
-        env(ib,jo,ka) = env(ip,jo,ka) * exp(env(ib,ji,ka))
+        ip=i-1
+        ys(i) = ys(i-1) * exp(xlgrets(i))
       endif
       end subroutine

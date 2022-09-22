@@ -1,33 +1,21 @@
-      subroutine unary(func,  ji, jo, ib, ka, env, ix, jx, kx)  
+      subroutine unary(func,  i, ys, xs, ix)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  unary.f : implements a call to a func of type unary f(x) 
 c
 c equation : 
-c     func(env(ib,ka,ja) : 
+c     ys(i) = func(xs(i)) : 
 c inputs :
 c     func   : real      :external unary function
-c     ib     : integer   :time bar to be calculated
-c     nbars  : integer   :number of periods (nbars)of the rolling 
-c     ka     : integer   :index of the asset
-c     ji     : integer   :index of the timeseriese 
-c     jo     :integer    :index of the output (where the return will be
-c                         stored
-c     env   :real(ix,jx,kx)
-c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
-c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
-c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
-c                         (total number of assets)
+c     i    : integer   :row index of the bar  to calculate the filter values 
+c     xs  : real(ix) :vector of outputs of the timeseries 
+c     ix  : integer   : row dimension of the inputs timeseries
 c outputs :
-c    the value of the return at ib is stored in the jo, ka
-c    position of the env variable
+c     ys  : real(ix) :vector of inputs : to store the output values
       implicit none
-      integer ib,ka,ji,jo,ix,jx,kx
-      real func,env(ix,jx,kx)
+      integer i,ix
+      real func,xs(ix),ys(ix)
       
-      env(ib,jo,ka) = func(env(ib,ji,ka)) 
+      ys(i) = func(xs(i)) 
       
       end subroutine

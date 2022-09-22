@@ -1,41 +1,33 @@
-      subroutine vol(depth, jret, jvol, ib, ka, env, ix, jx, kx)  
+      subroutine vol(depth, i, yvols, xs,ix)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
-c  vol.f : function to calculate the volatility  
+c  vol.f : function to calculate the mean and volatility  
 c           of the return over a period of depth ds
-c
+c     
 c equation : 
-c     vol(i) = 1/depth (asum(ret(i)*ret(i) - ret_m(i)*ret_m(i)) 
+c       calls the numeral recipices function avevar
+c       The initialisation is made for i>1 until n<depth
+c       if i <= depth then n=i 
 c
 cc
 c inputs :   
 c     depth  : integer   :depth : number of bars to calculate the vol
-c     ib     : integer   :time bar to be calculated
-c     ka     : integer   :index of the asset
-c     jret   : integer   :index of the log ret 
-c     jvol   : integer   :index of the properties where the vol will be e
-c                         stored
-c     env   :real(ix,jx,kx)
-c                       : environnement of the simulation
-c     ix  : integer   : row dimension of the env variables
-c                         (total number of bars)
-c     jx  : integer   : colunm dimension of the env variable
-c                         (total number of properties)
-c     kx  : integer   : depth dimenstion of the env variable
-c                         (total number of assets)
+c     i      : integer   :time bar to be calculated
+c     xs     : real(ix)  : time series 
+c     ix     : integer   :index of the asset
 c outputs :
-c    the value of the vol at ib is stored in the jvol, ka 
-c    position of the env variable
+c     ymeans : real(ix) : time series of the output means at i
+c     yvols  : real(ix) : time series of the output variance at i
       implicit none
-      integer depth,ib,ka,ji,jo,ix,jx,kx
-      integer ip
-      real vol, env(ix,jx,kx)
+      integer depth,i, ix, n
+      real  yvols(ix), xs(ix), yrvolfc, var, mean
+      parameter(yrvolfc = 15.8745078664)
 c calculate previous bar
-      ip=ib-1
-      if (ib .lt. depth) then
-        env(ib,jo,ka) = 0. 
+      n = min(i, depth)
+      if (n .eq. 1) then
+         yvols(i) = 0. 
       else
-        env(ib,jo,ka) = (1.-alpha)*env(ip,jo,ka)
-     &      + alpha*env(ib,ji,ka)
+        call avevar(xs(i-n+1), n, mean, var)
+        yvols(i) = yrvolfc * sqrt(var)
       endif
       end subroutine
