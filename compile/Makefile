@@ -12,11 +12,11 @@ NRPATH = ${HOME}/trading/src/nr
 
 COREOBJ = load_asset.o print_error.o ema.o print_env.o \
 	 ret.o rebase.o indcross.o retcond.o logret.o rollma.o unaries.o \
-	 unary.o binary.o detrend.o aliasing.o vol.o
+	 unary.o binary.o detrend.o aliasing.o vol.o indchannelbreak.o \
+	 movmax.o movmin.o 
 
 NROBJ = gammln.o memcof.o evlmem.o avevar.o 
 
-SRCOBJ = main.o 
 
 %.o: $(COREPATH)/%.f
 	$(FC) $(FFLAGS) -c $<
@@ -30,11 +30,21 @@ main.o: $(STGYPATH)/main.f $(STGYPATH)/simulation.inc
 trend.o: $(STGYPATH)/trend.f $(STGYPATH)/trend.inc
 	$(FC) $(FFLAGS) -c $<	
 
-simul: $(COREOBJ) $(SRCOBJ) $(NROBJ)
-	 $(FC)  $(COREOBJ)  $(NROBJ) $(SRCOBJ) -o $(APPPATH)/simul -lm
+simulchannel.o: $(STGYPATH)/simulchannel.f $(STGYPATH)/simulchannel.inc
+	$(FC) $(FFLAGS) -c $<
 
-trend: $(COREOBJ) trend.o $(NROBJ)
+simul: $(COREOBJ) $(NROBJ) simul.o
+	 $(FC)  $(COREOBJ)  $(NROBJ) simul.o -o $(APPPATH)/simul -lm
+
+trend: $(COREOBJ) $(NROBJ) trend.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) trend.o -o $(APPPATH)/trend -lm
+
+simulchannel: $(COREOBJ) $(NROBJ) simulchannel.o
+	 $(FC)  $(COREOBJ)  $(NROBJ) simulchannel.o -o $(APPPATH)/simulchannel -lm
+
+
+
+
 
 clean:
 	rm -f *.o
