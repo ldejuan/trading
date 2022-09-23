@@ -1,10 +1,10 @@
-      parameter(imax=8258,jmax=12, kmax=1)
+      parameter(imax=8258,jmax=14, kmax=1)
       parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5)
-      parameter(jmaxhigh=6, jminlow=7)
-      parameter(jret=8, jnav=9)
-      parameter(jcrs=10, jrst=11,jnavs=12)
-      parameter(nbbarshigh=26, nbbarslow=28)
+      parameter(jstema=6, jlgema=7,jtslpema=8)
+      parameter(jret=9, jnav=10)
+      parameter(jcrs=11, jrst=12,jnavs=13)
+      parameter(nshort=26, nlong=100)
 
   ! imax  : is the number of bars in the market data
   ! jmax  : is the total number of properties of the simulation
@@ -19,8 +19,9 @@
   ! jclose: column index of the close price in a bar
   ! jlow  : column index of the low price in a bar
   ! jpdiv : column index of dividend reinvested in a bar
-  ! jminhigh: column index of the running minimum high prices
-  ! jmaxlow : column index of the running maximum low prices
+  ! jstema: column index of the short ema
+  ! jlgema : column index of the long ema
+  ! jtslpema : column index of the slope ema
 
   ! jret  : column index of the return of the dividend corrected price
   ! jnav  : column index of the nav (over 100) of the dividend corrected price
@@ -28,6 +29,6 @@
   ! jcrs  : column index of the channel break through indicator strategy
   ! jrst  : column index of the return of the channel break through (long)
   ! jnavs  : column index of the nav (over 100) of the strategy
-  ! nbbarshigh : column index of the look back window for moving min of high price
-  ! nbbarslow : column index of the look back window for moving max of low price
+  ! nshort : column index of the short ema period
+  ! nlong : column index of the long ema period
 

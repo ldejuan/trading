@@ -1,4 +1,4 @@
-      program simulchannel
+      program simulmacd
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c simulchannel.f
@@ -6,7 +6,7 @@ c date 20220923
 c author Luis de Juan
 c version 0.1
 c 
-c  File entry  point for a simulation of the a channel break through 
+c  File entry  point for a simulation of the a macd 
 c  The common structure to env structure 
 c  simulchannel.inc for parameters
 c  assetfilename : name of the file to open
@@ -17,8 +17,9 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
       integer jopen, jhigh, jlow, jclose,jpdiv
 
-      integer jmaxhigh, jminlow
-      integer nbbarshigh, nbbarslow,nstart
+      integer jstema, jlgema, jtslpema
+      integer nshort, nlong
+      real alphast, alphalg 
 
       integer jret, jnav
       integer jcrs, jrst, jnavs 
@@ -29,7 +30,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       data slip /0.0/
       data nbdays /252/
       logical ier
-      include "simulchannel.inc"
+      include "simulmacd.inc"
 c
 c env : global environnement with all the data 
 c     env(i,j,k): i: bars, j: proprietes, k: asset
@@ -41,21 +42,26 @@ c
       common /cerror/iwr,ier
       ird = irdx
       iwr = iwrx
-      nstart = max(nbbarshigh,nbbarslow)
 
       call load_asset(assetfilename,env, dates, nn,mm,kk, kmax)
 c
 c start of the simulation 
 c
+      alphast = 2./(1. + nshort)
+      alphalg = 2./(1. + nlong)
+
       do i=1,imax
         do k=1,kmax
-          call movmax(nbbarshigh, i, env(1,jmaxhigh,k) , env(1, jhigh, k), imax)
-          call movmin(nbbarslow, i, env(1,jminlow,k) , env(1, jlow, k), imax)
-          call indchannelbreak(i, env(1,jcrs,k), env(1,jmaxhigh,k), env(1,jminlow,k), env(1,jhigh,k), env(1,jlow,k), imax)
+          call ema(alphast, i, env(1,jstema,k), env(1, jclose, k), imax)
+          call ema(alphalg, i, env(1,jlgema,k), env(1, jclose, k), imax)
+          call ema(0.05, i, env(1,jtslpema,k), env(1, jclose, k), imax)
+          call indmacd(i, env(1,jcrs,k), env(1,jlgema,k), env(1,jstema,k), env(1,jtslpema,k), imax)
+
           call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)
-          call rebase(nstart, i, env(1,jnav,k), env(1, jret,k),imax)
+          call rebase(nlong, i, env(1,jnav,k), env(1, jret,k),imax)
+          
           call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k), imax)
-          call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k), imax)
+          call rebase(nlong, i, env(1, jnavs,k), env(1, jrst, k), imax)
         enddo
       enddo
     

@@ -13,7 +13,7 @@ NRPATH = ${HOME}/trading/src/nr
 COREOBJ = load_asset.o print_error.o ema.o print_env.o \
 	 ret.o rebase.o indcross.o retcond.o logret.o rollma.o unaries.o \
 	 unary.o binary.o detrend.o aliasing.o vol.o indchannelbreak.o \
-	 movmax.o movmin.o 
+	 movmax.o movmin.o indmacd.o
 
 NROBJ = gammln.o memcof.o evlmem.o avevar.o 
 
@@ -33,6 +33,9 @@ trend.o: $(STGYPATH)/trend.f $(STGYPATH)/trend.inc
 simulchannel.o: $(STGYPATH)/simulchannel.f $(STGYPATH)/simulchannel.inc
 	$(FC) $(FFLAGS) -c $<
 
+simulmacd.o: $(STGYPATH)/simulmacd.f $(STGYPATH)/simulmacd.inc
+	$(FC) $(FFLAGS) -c $<
+
 simul: $(COREOBJ) $(NROBJ) simul.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) simul.o -o $(APPPATH)/simul -lm
 
@@ -41,6 +44,9 @@ trend: $(COREOBJ) $(NROBJ) trend.o
 
 simulchannel: $(COREOBJ) $(NROBJ) simulchannel.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) simulchannel.o -o $(APPPATH)/simulchannel -lm
+
+simulmacd: $(COREOBJ) $(NROBJ) simulmacd.o
+	 $(FC)  $(COREOBJ)  $(NROBJ) simulmacd.o -o $(APPPATH)/simulmacd -lm
 
 
 

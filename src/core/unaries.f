@@ -33,5 +33,16 @@ c     factor = sqrt(252)**(252-1)/252
       stdev = sqrt(x-y*y)*factor
       return
       end
-      
+
+      function ret(x,y)
+c
+c     calculates the return
+c      input : x second order moment
+c              y mean value
+c
+      implicit none
+      real x,y,ret
+      ret = y/x - 1.
+      return
+      end
       

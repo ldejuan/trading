@@ -14,7 +14,7 @@ c inputs :
 c     chg   :real     :cost of a entry - sold position in unit of returns
 c     split :real     :splithedge in % of the return
 c     i     :integer  :time bar to be calculated
-c     xrets :read(ix) :input asset return time series of the 
+c     xrets :read(ix) :input asset return time series of the prices 
 c     xinds :real(ix) :input indicator time series
 c     ix    : integer :row dimension of the inputs
 c outputs :
