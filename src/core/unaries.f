@@ -17,7 +17,7 @@ c
 
       square = x**2
       return
-      end
+      end function
 
       function stdev(x,y)
 c
@@ -32,17 +32,17 @@ c     factor = sqrt(252)**(252-1)/252
       parameter (factor=15.811513787553) 
       stdev = sqrt(x-y*y)*factor
       return
-      end
+      end function
 
-      function ret(x,y)
+      function rate(x,y)
 c
-c     calculates the return
+c     calculates the rate of return
 c      input : x second order moment
 c              y mean value
 c
       implicit none
-      real x,y,ret
-      ret = y/x - 1.
+      real x,y,rate
+      rate = y/x - 1.
       return
-      end
+      end function
       

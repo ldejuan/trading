@@ -35,3 +35,34 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       enddo
 
       end subroutine
+
+      subroutine print_risks(ird,riskv, dates, nbar, n, m)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
+c  subrouutine to print_risks.f
+c
+c  This function will print of the risk matrix over a period
+c
+c input 
+c   ird      : integer      : index of the I/O to write to 
+c   riskv      : riskv: risk matrix
+c   dates     : date vector with the initial set to 1
+c   m        : total number of dates (should be equal to n*nbar)
+c   n        : total number of risk periods to print
+c   nbar     : size in bars of the timespam of the risk calculation (252 by default)
+c 
+c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer ird, n,m,i, nm, nbar, j
+      real riskv(n,4)
+      character dates(m)*10
+      character fields(5)*15
+      data fields /'date', 'return', 'volatility', 'sharpe', 'calmar'/
+      write(ird,*) (fields(i), i=1,5)
+      do i=1,n
+        nm = min(m,i*nbar)
+        write(ird,*) dates(nm), (riskv(i,j), j=1,4)
+      enddo
+
+      end subroutine
+

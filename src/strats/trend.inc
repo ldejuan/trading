@@ -1,7 +1,7 @@
       parameter(imax=8258,jmax=8, kmax=1)
       parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5, jret=6, jals=7, jtrd=8)
-      parameter(npole=16,ndepth=60, nperiod=200)
+      parameter(npole=16,ndepth=60, nperiod=200, nbyears=34)
 
 
   ! imax  : is the number of bars in the market data rows
@@ -25,3 +25,4 @@
   ! npole  : number of poles for the calculation of entropy spectrum
   ! ndepth : depth of the data to compute the spectrum
   ! nperiod : max period (in bars) for the calculation of the spectrum (from nperiods to 2 Nyquist Frequency)
+  ! nbyears: max number of years for risks calculations 

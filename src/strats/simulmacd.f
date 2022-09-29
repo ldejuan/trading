@@ -14,7 +14,7 @@ c
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/ 
-      integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
+      integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax, nmax
       integer jopen, jhigh, jlow, jclose,jpdiv
 
       integer jstema, jlgema, jtslpema
@@ -23,7 +23,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       integer jret, jnav
       integer jcrs, jrst, jnavs 
-      integer nst,nlg,nyr, nbdays
+      integer nst,nlg,nyr, nbdays, nbyears
 
       real chg,slip
       data chg /1.e-5/
@@ -38,6 +38,7 @@ c
       
       real env(1:imax,1:jmax,1:kmax)
       character dates(1:imax,1:kmax)*10
+      real orisk(1:nbyears,4)
       common /cfile/ird
       common /cerror/iwr,ier
       ird = irdx
@@ -64,7 +65,17 @@ c
           call rebase(nlong, i, env(1, jnavs,k), env(1, jrst, k), imax)
         enddo
       enddo
-    
-      call print_env(1,env,dates,imax,jmax,kmax)
+c
+c Calculate the 1 year risk matrics from a price values
+c
+c
+      nmax = imax-nlong+1
+      call yearlyrisks(orisk,env(nlong,jnavs,1),nmax,nbyears)
+
+      open(10, file='statistics_macd.csv', status='NEW')
+      call print_risks(10,orisk, dates(nlong:nmax,1), nbdays, nbyears, nmax)
+      close(10)
+
+      call print_env(10,env,dates,imax,jmax,kmax)
 
       end program

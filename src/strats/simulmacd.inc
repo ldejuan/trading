@@ -4,7 +4,7 @@
       parameter(jstema=6, jlgema=7,jtslpema=8)
       parameter(jret=9, jnav=10)
       parameter(jcrs=11, jrst=12,jnavs=13)
-      parameter(nshort=26, nlong=100)
+      parameter(nshort=26, nlong=100, nbyears=34)
 
   ! imax  : is the number of bars in the market data
   ! jmax  : is the total number of properties of the simulation
@@ -31,4 +31,4 @@
   ! jnavs  : column index of the nav (over 100) of the strategy
   ! nshort : column index of the short ema period
   ! nlong : column index of the long ema period
-
+  ! nbyears: number of years of the trading strategy 

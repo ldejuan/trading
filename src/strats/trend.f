@@ -18,7 +18,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       character*80 assetfilename /'../data/cac40_index.csv'/ 
       integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
       integer jopen,jhigh,jlow,jclose,jpdiv,jret,jals,jtrd
-      integer ientps, ientpe, npole, ndepth, nperiod
+      integer ientps, ientpe, npole, ndepth, nperiod, nbyears
       logical ier
       real xms,fq, evlmem
       external evlmem
@@ -59,5 +59,7 @@ c calculate the spectrum
       enddo
 
 c      call print_env(1,env,dates,imax,jmax,kmax)
+
+c calculate the yearly risks
 
       end program
