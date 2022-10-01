@@ -13,8 +13,9 @@ c  assetfilename : name of the file to open
 c  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      character*80 assetfilename /'../data/cac40_index.csv'/ 
-      integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax, nmax
+      character*80 assetfilename /'../data/cac40_index.csv'/
+      integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax,
+     & nmax, jheaderx
       integer jopen, jhigh, jlow, jclose,jpdiv
 
       integer jstema, jlgema, jtslpema
@@ -23,14 +24,35 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       integer jret, jnav
       integer jcrs, jrst, jnavs 
-      integer nst,nlg,nyr, nbdays, nbyears
+      integer nst,nlg,nyr, nbdays, nbyears, startday
 
       real chg,slip
       data chg /1.e-5/
       data slip /0.0/
       data nbdays /252/
+      data startday /208/
       logical ier
       include "simulmacd.inc"
+
+c
+c    define headers
+c      
+      character*15 headers(jheaderx)
+      data headers /
+     & 'date',
+     & 'open',
+     & 'high',
+     & 'low',
+     & 'close',
+     & 'divclose',
+     & 'ema_short',
+     & 'ema_long',
+     & 'slope',
+     & 'ret_underling',
+     & 'nav_underling',
+     & 'position',
+     & 'ret_strategy',
+     & 'nav_strategy'/
 c
 c env : global environnement with all the data 
 c     env(i,j,k): i: bars, j: proprietes, k: asset
@@ -38,11 +60,16 @@ c
       
       real env(1:imax,1:jmax,1:kmax)
       character dates(1:imax,1:kmax)*10
-      real orisk(1:nbyears,4)
+      real indexrisk(1:nbyears,4), stratrisk(1:nbyears,4), excesrisk(1:nbyears,4)
       common /cfile/ird
       common /cerror/iwr,ier
       ird = irdx
       iwr = iwrx
+
+      write(*,*) (headers(i), i=1, jheaderx)
+c
+c
+c
 
       call load_asset(assetfilename,env, dates, nn,mm,kk, kmax)
 c
@@ -69,13 +96,33 @@ c
 c Calculate the 1 year risk matrics from a price values
 c
 c
-      nmax = imax-nlong+1
-      call yearlyrisks(orisk,env(nlong,jnavs,1),nmax,nbyears)
-
-      open(10, file='statistics_macd.csv', status='NEW')
-      call print_risks(10,orisk, dates(nlong:nmax,1), nbdays, nbyears, nmax)
+      nmax = imax-startday+1
+c
+c    strategy statistics
+c
+      call yearlyrisks(nbdays,stratrisk,nbyears,env(startday,jnavs,1),nmax)
+      open(10, file='statistics_macd.csv')
+      call print_risks(10,nbdays, stratrisk, nbyears, dates(startday,1),nmax)
+      close(10)
+c
+c    index statisticis
+c
+      call yearlyrisks(nbdays,indexrisk,nbyears,env(startday,jnav,1),nmax)
+      open(10, file='statistics_index.csv')
+      call print_risks(10,nbdays, indexrisk, nbyears, dates(startday,1),nmax)
       close(10)
 
-      call print_env(10,env,dates,imax,jmax,kmax)
+c
+c    spread statistics
+c
+      call diffmatrix(excesrisk,stratrisk,indexrisk,nbyears,4)
+
+      open(10, file='spread_macd.csv')
+      call print_risks(10,nbdays, excesrisk, nbyears, dates(startday,1),nmax)
+      close(10)
+
+      open(10, file='simul_macd.csv')
+      call print_env_headers(10,env,dates,imax,jmax,kmax, headers, jheaderx)
+      close(10)
 
       end program

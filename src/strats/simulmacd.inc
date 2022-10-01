@@ -1,14 +1,15 @@
-      parameter(imax=8258,jmax=14, kmax=1)
+      parameter(imax=8258,jmax=13, kmax=1,jheaderx=14)
       parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5)
       parameter(jstema=6, jlgema=7,jtslpema=8)
       parameter(jret=9, jnav=10)
       parameter(jcrs=11, jrst=12,jnavs=13)
-      parameter(nshort=26, nlong=100, nbyears=34)
+      parameter(nshort=26, nlong=100, nbyears=40)
 
   ! imax  : is the number of bars in the market data
   ! jmax  : is the total number of properties of the simulation
   ! kmax  : is the total number of assets in the simulation
+  ! jheaderx : is the number of headers for printing (=jmax+1)
   ! nn    : number of bars to read
   ! mm    : number of bars parameter to read
   ! irdx  :  index of I/O file

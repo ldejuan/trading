@@ -1,3 +1,23 @@
+      subroutine date2ymd(y,m,d, sdate)      
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c  function to get the y,,m,d only o a date with format  DD/MM/YYYY
+c    
+c   inputs:
+c     sdate : string date as DD/MM/YYYY
+c   outputs:
+c      y : integer : year
+c      m : integer : months
+c      d : integer : days
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      character*(10) sdate
+      character s
+      integer y,m,d
+
+      read(sdate, '(i2,a1,i2,a1,i4)') d,s,m,s,y 
+
+      end subroutine
+
       function date2int(sdate)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c   function to transform a string date : DD/MM/YYYY as a integer date
@@ -9,12 +29,32 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       character*(10) sdate
       character s1,s2
       integer date2int, y,m,d
-      read(sdate, '(i2,a1,i2,a1,i4)') d,s1,m,s2,y
 
-      write(*,*) sdate
+      call date2ymd(y,m,d, sdate)
       date2int = y * 10000 + m * 100 + d
 
       return
+      end function  
+
+      function date2jed(sdate)
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c   function to transform a string date : DD/MM/YYYY as a JED
+c     
+c   input sdate : string date
+c   output date2jed : double precision : JED 
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      character*(10) sdate
+      integer y,m,d
+      double precision date2jed, f
+      
+      call date2ymd(y,m,d, sdate)
+
+      f=0.5D+00
+      call ymdf_to_jed_common(y,m,d,f,date2jed)
+
+      return
+
       end function  
 
       subroutine timestamp()
