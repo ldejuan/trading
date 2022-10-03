@@ -10,7 +10,7 @@ c inputs :
 c     prcs: real(n)      : price time series   
 c     n  :  integer :size of the input price vector
 c outputs :
-c     retrn  : total return over the period: 
+c     return  : total return over the period: 
 c     vol  : volatility over the period
 c     sharpe  : sharpe ratio (ret/vol)
 c     calmar  : max ret / max drawdown 
@@ -24,7 +24,7 @@ c     calmar  : max ret / max drawdown
 
       parameter(yrvolfc = 15.8745078664)
 
-c calculate retrn
+c calculate return
       retrn = prcs(n)/prcs(1) - 1.
       do i=1,n
         call ret(i, rets, prcs, n)
@@ -74,10 +74,42 @@ c     drawdown  : real : maximum drawdonw over the period
 
       end function
 
-      subroutine yearlyrisks(freq, riskv, m, prcs, n)
+      subroutine schedulerisks(sched, riskv, m, prcs, n)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
-c    yearlyrisks.f : subroutine to calculate the yearly risks over a period.
+c    yearlyrisks.f : subroutine to calculate the risks over a defined schedule 
+
+c    inputs:
+c     sched : integer(m,3) : schedule for the risk calculations. It is the 
+c                            result of the gen_schedule functions
+c     m     : integer     : number of periods
+c     prcs: real(n) : price time series (or strategy nav)
+c     n : real : size of the time series
+c    outpout: 
+c     riskv: real(m,4) : risks matrix : 
+c            rows : for each year : ret, vol, sharpe, calmar
+c    
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer n, m, jret, jvol, jsharpe,jcalmar,ii,il,i,j
+      integer sched(m,3)
+      real riskv(m,4), prcs(n)
+      parameter(jret=1, jvol=2, jsharpe=3, jcalmar=4)
+      j=1
+      do i=1,m
+        ii = sched(i,1)
+        il = sched(i,2)
+        call risks(riskv(j,jret), riskv(j,jvol), riskv(j,jsharpe), riskv(j,jcalmar), prcs(ii:il), il-ii+1)
+        j = j+1
+      enddo
+
+      end subroutine    
+
+      subroutine periodrisks(freq, riskv, m, prcs, n)
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
+c    yearlyrisks.f : subroutine to calculate the risks over a period defined as a 
+c           constant step 
 c           The period is 252 trading days (1 year by default)
 c    inputs:
 c     freq : frequency in number of bars (generally days) of the risk calculation
@@ -100,6 +132,73 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       enddo
 
       end subroutine
+
+      subroutine gen_schedule(freq, iperiods, schedule, mmax, sdates, nmax)
+c  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c 
+c     gen_schedule.f : subroutine to generate a schedule over a list of dates
+c      at different frequencies
+c
+c     input :
+c        freq : char :A,S,Q,M : annual, semi annual, quarter, monthly
+c        sdates : character*10(nmax) : dates over which the schedule is generated
+c        nmax  : integer    : length of the dates vector
+c     output:
+c        schedule : integer(mmax,3) : where 
+c            schedule(i,1) date index of the start of the period
+c            schedule(i,2) date index of the end of the period
+c            schedule(i,3) last date in format YYYYMMDD as int of the period
+c        iperiods : integer : number of maximum periods to consider
+c
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer i,mmax, nmax, y,m,d, yp,ip,j,k, iperiods
+      character*10 sdates(nmax)
+      integer schedule(mmax, 3), date2int
+      character freq
+      external date2int
+
+
+      if (freq .ne. 'A') then
+        write (*,*) 'Error only Annual'
+        return
+      end if
+      call date2ymd(yp,m,d, sdates(1))
+      ip = 1
+      j = 1
+      do i=2, nmax
+        call date2ymd(y,m,d,sdates(i))
+        if (y .ne. yp) then
+c    do not forget the start of the period is at endofday of the previous date
+          schedule(j,1)=max(ip-1,1)
+          schedule(j,2)=i
+          schedule(j,3)=date2int(sdates(i))
+          ip=i
+          j=j+1
+          yp=y
+        end if
+      end do
+
+c ensure last
+
+      if (y .eq. yp) then
+        schedule(j,1)=ip-1
+        schedule(j,2)=nmax
+        schedule(j,3)=date2int(sdates(nmax))
+      end if
+      iperiods = j
+           
+c fill last 
+      do k=j+1,mmax
+        schedule(k,1)=schedule(j,1)
+        schedule(k,2)=schedule(j,2)
+        schedule(k,3)=schedule(j,3)   
+      end do 
+
+
+      end subroutine
+
+
       
       subroutine diffvector(vs, v1s, v2s, n)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc     

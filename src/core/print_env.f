@@ -108,5 +108,61 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
         enddo
       enddo
 
+      end subroutine
+
+      subroutine print_schedule(ird, shed, mmax)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
+c  subrouutine to print_env.f
+c
+c  This function will print of the environement variabless to a 
+c  open filename
+c
+c input 
+c   ird      : integer      : index of the I/O to write to 
+c   shed      : integer(mmax,3): schedule
+c   nnmax    : integer  : lenght of the schedule file
+c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer ird,i, j, mmax, shed(mmax,3)
+      character*10 headers(3)
+      data headers /'i_start', 'i_end', 'date_end'/ 
+
+      write(ird,*) (headers(i),i=1,3)
+      do i=1,mmax
+        write(ird,*) (shed(i,j),j=1,3)
+      enddo
+
+
+      end subroutine
+
+      subroutine print_schedule_risks(ird, schedule, riskv, n, dates, m)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
+c  subrouutine to print_risks.f
+c
+c  This function will print of the risk matrix over a period
+c
+c input 
+c   ird      : integer          : index of the I/O to write to
+c   schedule : integer          : schedule of the risks
+c   riskv    : real(n)          : risk matrix
+c   n        : integer          : total number of risk periods to print
+c   dates    : character*10 (m) : date vector with the initial set to 1
+c   m        : integer          : size of the date vector
+c 
+c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer ird, freq, n, m, nm, i, j, schedule(n,3)
+      real riskv(n,4) 
+      character*10 dates(m)
+      character*10 fields(5)
+      data fields /'date', 'return', 'volatility', 'sharpe', 'calmar'/
+      write(ird,'(*(a15,","))') (fields(i), i=1,5)
+
+      do i=1,n
+        write(ird,*) dates(schedule(i,2)), (riskv(i,j), j=1,4)
+      enddo
+
       end subroutine      
 

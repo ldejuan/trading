@@ -12,6 +12,7 @@
       end do
 
       jed = 2446065
+      
       call ymdf_to_jed_common ( y, m, d, f, jed )
       write(*,*) y,m,d,f,jed
 

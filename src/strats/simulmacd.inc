@@ -4,7 +4,7 @@
       parameter(jstema=6, jlgema=7,jtslpema=8)
       parameter(jret=9, jnav=10)
       parameter(jcrs=11, jrst=12,jnavs=13)
-      parameter(nshort=26, nlong=100, nbyears=40)
+      parameter(nshort=50, nlong=250, nbyears=40)
 
   ! imax  : is the number of bars in the market data
   ! jmax  : is the total number of properties of the simulation

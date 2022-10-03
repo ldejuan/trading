@@ -61,12 +61,11 @@ c
       real env(1:imax,1:jmax,1:kmax)
       character dates(1:imax,1:kmax)*10
       real indexrisk(1:nbyears,4), stratrisk(1:nbyears,4), excesrisk(1:nbyears,4)
+      integer sched(1:nbyears, 3), nsched
       common /cfile/ird
       common /cerror/iwr,ier
       ird = irdx
       iwr = iwrx
-
-      write(*,*) (headers(i), i=1, jheaderx)
 c
 c
 c
@@ -95,30 +94,30 @@ c
 c
 c Calculate the 1 year risk matrics from a price values
 c
-c
+      call gen_schedule('A', nsched, sched, nbyears, dates(1,1), imax)
+
       nmax = imax-startday+1
 c
 c    strategy statistics
 c
-      call yearlyrisks(nbdays,stratrisk,nbyears,env(startday,jnavs,1),nmax)
-      open(10, file='statistics_macd.csv')
-      call print_risks(10,nbdays, stratrisk, nbyears, dates(startday,1),nmax)
+      call schedulerisks(sched, stratrisk,nbyears,env(1,jnavs,1),imax)
+      open(10, file='stats_macd.csv')
+      call print_schedule_risks(10, sched, stratrisk, nbyears, dates, imax)
       close(10)
 c
 c    index statisticis
 c
-      call yearlyrisks(nbdays,indexrisk,nbyears,env(startday,jnav,1),nmax)
-      open(10, file='statistics_index.csv')
-      call print_risks(10,nbdays, indexrisk, nbyears, dates(startday,1),nmax)
+      call schedulerisks(sched, indexrisk,nbyears,env(1,jnav,1),imax)
+      open(10, file='stats_index.csv')
+      call print_schedule_risks(10, sched, indexrisk, nbyears, dates, imax)
       close(10)
-
 c
 c    spread statistics
 c
       call diffmatrix(excesrisk,stratrisk,indexrisk,nbyears,4)
 
-      open(10, file='spread_macd.csv')
-      call print_risks(10,nbdays, excesrisk, nbyears, dates(startday,1),nmax)
+      open(10, file='stats_spread_macd.csv')
+      call print_schedule_risks(10, sched, excesrisk, nbyears, dates, imax)
       close(10)
 
       open(10, file='simul_macd.csv')
