@@ -133,7 +133,7 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine gen_schedule(freq, iperiods, schedule, mmax, sdates, nmax)
+      subroutine gen_schedule(freq, schedule, mmax, sdates, nmax)
 c  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c 
 c     gen_schedule.f : subroutine to generate a schedule over a list of dates

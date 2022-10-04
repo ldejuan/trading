@@ -1,81 +1,103 @@
       program simulmacd
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
-c simulchannel.f
+c simulmacd.f
 c date 20220923
 c author Luis de Juan
 c version 0.1
 c 
-c  File entry  point for a simulation of the a macd 
-c  The common structure to env structure 
-c  simulchannel.inc for parameters
-c  assetfilename : name of the file to open
-c  
+c    Full simulation of the macd to perform optimizations 
+c inputs:
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/
-      integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax,
-     & nmax, jheaderx
+      integer i,j,imax,jmax,kmax, nn,mm,kk
+      integer ishort, fshort, dshort, ilong, flong, dlong
+      integer nperiods, nvars
+      character*15 headers(11)
+      integer ird, irdx, iwr, iwrx
+
+      data headers /'date', 'short','long', 'spread_return', 'spread_vol',
+     & 'spread_sharpe', 'spread_calmar', 'return', 'vol', 'sharpe', 'calmar' /
+
+      include "macdgenerate.inc"
+
+      integer schedule(nperiods,3)
+      real env(1:imax,1:jmax,1:kmax), risks(nperiods,4), vars(2), stratrisks(nperiods,4)
+      character dates(1:imax,1:kmax)*10
+
+      call load_asset(assetfilename,env, dates, nn, mm, kk, kmax)
+      call gen_schedule('A', schedule, nperiods, dates(1,1), imax)
+
+
+      open(irdx, file='simul_macd.csv')
+      write(irdx,*) (headers(i), i=1,11)
+
+      do i=ishort, fshort, dshort
+        do j=ilong,flong, dlong
+          vars(1) = real(i)
+          vars(2) = real(j)
+          call macd(risks, stratrisks, vars, nvars, schedule, nperiods, env, imax, jmax, kmax)
+          call print_simul_risks(irdx, vars, nvars, schedule, risks, stratrisks, nperiods)
+        end do
+      end do
+
+      close(irdx)
+
+      end program
+
+      subroutine macd(risks, stratrisks, vars, nvars, schedule, nperiods, env, imax, jmax, kmax)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
+c macd.f
+c date 20220923
+c author Luis de Juan
+c version 0.1
+c 
+c    one single simulation of the macd strategy 
+c inputs:
+c     vars: real(nvars) : variables of the strategy
+c           vars(isht) : number of day of short 
+c           vars(ilng) : number of days of long
+c     nvars: integer    :  number of variables of the strategy             
+c     schedule: integer(nperiods, 3) : yearly schedule for the risk calculations
+c               schedule(i,1) : start index of the risk period
+c               schedule(i,2) : en index of the risk period
+c               schedule(i,3) : end date of the risk period as YYYYMMDD (int)
+c     nperiods :  number of periods of the schedule
+c     env      : real(imax,jmax,kmax) : flux environment of the index strategy
+c outputs:
+c     risks    : real(nperiods,4) : excess risks over the index
+c     stratrisk:  real(nperiods,4): strategy risks 
+c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer imax, jmax, kmax, nperiods, nvars, isht, ilng,k,i, nstart
       integer jopen, jhigh, jlow, jclose,jpdiv
-
       integer jstema, jlgema, jtslpema
-      integer nshort, nlong
       real alphast, alphalg 
-
       integer jret, jnav
-      integer jcrs, jrst, jnavs 
-      integer nst,nlg,nyr, nbdays, nbyears, startday
+      integer jcrs, jrst, jnavs
 
+      integer ird, irdx, iwr, iwrx, ier
+
+      include "macd.inc"
+      integer schedule(nperiods,3)
+      real indexrisk(nperiods,4), stratrisks(nperiods,4), env(imax,jmax,kmax)
+      real risks(nperiods,4), vars(nvars)
+      common /cfile/ ird
+      common /cerror/ iwr,ier
       real chg,slip
       data chg /1.e-5/
       data slip /0.0/
-      data nbdays /252/
-      data startday /208/
-      logical ier
-      include "simulmacd.inc"
 
-c
-c    define headers
-c      
-      character*15 headers(jheaderx)
-      data headers /
-     & 'date',
-     & 'open',
-     & 'high',
-     & 'low',
-     & 'close',
-     & 'divclose',
-     & 'ema_short',
-     & 'ema_long',
-     & 'slope',
-     & 'ret_underling',
-     & 'nav_underling',
-     & 'position',
-     & 'ret_strategy',
-     & 'nav_strategy'/
-c
-c env : global environnement with all the data 
-c     env(i,j,k): i: bars, j: proprietes, k: asset
-c
       
-      real env(1:imax,1:jmax,1:kmax)
-      character dates(1:imax,1:kmax)*10
-      real indexrisk(1:nbyears,4), stratrisk(1:nbyears,4), excesrisk(1:nbyears,4)
-      integer sched(1:nbyears, 3), nsched
-      common /cfile/ird
-      common /cerror/iwr,ier
       ird = irdx
       iwr = iwrx
-c
-c
-c
+ 
+      nstart = int(vars(ilng))
 
-      call load_asset(assetfilename,env, dates, nn,mm,kk, kmax)
-c
-c start of the simulation 
-c
-      alphast = 2./(1. + nshort)
-      alphalg = 2./(1. + nlong)
+      alphast = 2./(1. + vars(isht))
+      alphalg = 2./(1. + vars(ilng))
 
       do i=1,imax
         do k=1,kmax
@@ -85,43 +107,16 @@ c
           call indmacd(i, env(1,jcrs,k), env(1,jlgema,k), env(1,jstema,k), env(1,jtslpema,k), imax)
 
           call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)
-          call rebase(nlong, i, env(1,jnav,k), env(1, jret,k),imax)
+          call rebase(nstart, i, env(1,jnav,k), env(1, jret,k),imax)
           
           call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k), imax)
-          call rebase(nlong, i, env(1, jnavs,k), env(1, jrst, k), imax)
+          call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k), imax)
         enddo
       enddo
-c
-c Calculate the 1 year risk matrics from a price values
-c
-      call gen_schedule('A', nsched, sched, nbyears, dates(1,1), imax)
 
-      nmax = imax-startday+1
-c
-c    strategy statistics
-c
-      call schedulerisks(sched, stratrisk,nbyears,env(1,jnavs,1),imax)
-      open(10, file='stats_macd.csv')
-      call print_schedule_risks(10, sched, stratrisk, nbyears, dates, imax)
-      close(10)
-c
-c    index statisticis
-c
-      call schedulerisks(sched, indexrisk,nbyears,env(1,jnav,1),imax)
-      open(10, file='stats_index.csv')
-      call print_schedule_risks(10, sched, indexrisk, nbyears, dates, imax)
-      close(10)
-c
-c    spread statistics
-c
-      call diffmatrix(excesrisk,stratrisk,indexrisk,nbyears,4)
+      call schedulerisks(schedule, stratrisks,nperiods,env(1,jnavs,1),imax)
+      call schedulerisks(schedule, indexrisk,nperiods,env(1,jnav,1),imax)
+      call diffmatrix(risks,stratrisks,indexrisk,nperiods,4)
 
-      open(10, file='stats_spread_macd.csv')
-      call print_schedule_risks(10, sched, excesrisk, nbyears, dates, imax)
-      close(10)
-
-      open(10, file='simul_macd.csv')
-      call print_env_headers(10,env,dates,imax,jmax,kmax, headers, jheaderx)
-      close(10)
-
-      end program
+      end subroutine
+ 

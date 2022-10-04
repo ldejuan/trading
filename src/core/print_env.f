@@ -136,7 +136,34 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine print_schedule_risks(ird, schedule, riskv, n, dates, m)
+      subroutine print_simul_risks(ird, vars, nv, schedule, risks, stratrisks, n)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c
+c  subrouutine to print_simul_risks.f
+c
+c  This function will print of the risk matrix over a period
+c
+c input 
+c   ird      : integer          : index of the I/O to write to
+c   vars     : real(nv)      : parameters  of the simulation
+c   nv       : integer          : size of the vars vector
+c   schedule : integer          : schedule of the risks
+c   riskv    : real(n)          : execess risk matrix
+c   stratrisk: real(n)          : strategy risk
+c   n        : n          : total number of risk periods to print
+c 
+c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      integer ird, nv, n, i, j, schedule(n,3)
+      real risks(n,4), vars(nv), stratrisks(n,4)
+      do i=1,n
+        write(ird,*) schedule(i,3), (vars(j), j=1,nv), (risks(i,j), j=1,4),
+     &  (stratrisks(i,j), j=1,4)  
+      enddo 
+
+      end subroutine   
+
+      subroutine print_schedule_risks(ird, schedule, riskv, n)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to print_risks.f
@@ -148,20 +175,17 @@ c   ird      : integer          : index of the I/O to write to
 c   schedule : integer          : schedule of the risks
 c   riskv    : real(n)          : risk matrix
 c   n        : integer          : total number of risk periods to print
-c   dates    : character*10 (m) : date vector with the initial set to 1
-c   m        : integer          : size of the date vector
 c 
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer ird, freq, n, m, nm, i, j, schedule(n,3)
+      integer ird, n, i, j, schedule(n,3)
       real riskv(n,4) 
-      character*10 dates(m)
       character*10 fields(5)
       data fields /'date', 'return', 'volatility', 'sharpe', 'calmar'/
       write(ird,'(*(a15,","))') (fields(i), i=1,5)
 
       do i=1,n
-        write(ird,*) dates(schedule(i,2)), (riskv(i,j), j=1,4)
+        write(ird,*) schedule(i,3), (riskv(i,j), j=1,4)
       enddo
 
       end subroutine      
