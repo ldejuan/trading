@@ -39,6 +39,9 @@ simulchannel.o: $(STGYPATH)/simulchannel.f $(STGYPATH)/simulchannel.inc
 simulmacd.o: $(STGYPATH)/simulmacd.f $(STGYPATH)/simulmacd.inc
 	$(FC) $(FFLAGS) -c $<
 
+blockchannel.o: $(STGYPATH)/blockchannel.f $(STGYPATH)/blockchannel.inc
+	$(FC) $(FFLAGS) -c $<
+
 simul: $(COREOBJ) $(NROBJ) simul.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) simul.o -o $(APPPATH)/simul -lm
 
@@ -47,6 +50,9 @@ trend: $(COREOBJ) $(NROBJ) trend.o
 
 simulchannel: $(COREOBJ) $(NROBJ) simulchannel.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) simulchannel.o -o $(APPPATH)/simulchannel -lm
+
+blockchannel: $(COREOBJ) $(NROBJ) blockchannel.o
+	 $(FC)  $(COREOBJ)  $(NROBJ) blockchannel.o -o $(APPPATH)/blockchannel -lm
 
 simulmacd: $(COREOBJ) $(NROBJ) simulmacd.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) simulmacd.o -o $(APPPATH)/simulmacd -lm
