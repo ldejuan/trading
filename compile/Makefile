@@ -2,16 +2,13 @@ SHELL = /bin/sh
 EXTRA  = -O3
 FFLAGS =  $(EXTRA)
 CFLAGS = -Ae $(EXTRA)
-#FC      = gfortran -std=legacy -ffixed-line-length-none -ffpe-summary=none $(FFLAGS)
-FC      = gfortran -std=legacy -ffixed-line-length-none $(FFLAGS)
+FC      = gfortran -std=legacy -ffixed-line-length-none -ffpe-summary=none $(FFLAGS)
 CC      = cc $(CFLAGS)
 
-HOME = c:/Users/ldejuan/work/aaDATA/home
-
-COREPATH = $(HOME)/trading/src/core
-STGYPATH = $(HOME)/trading/src/strats
-APPPATH = $(HOME)/trading/app
-NRPATH = $(HOME)/trading/src/nr
+COREPATH = ${HOME}/trading/src/core
+STGYPATH = ${HOME}/trading/src/strats
+APPPATH = ${HOME}/trading/app
+NRPATH = ${HOME}/trading/src/nr
 
 COREOBJ = load_asset.o print_error.o ema.o print_env.o \
 	 ret.o rebase.o indcross.o retcond.o logret.o rollma.o unaries.o \
@@ -62,9 +59,6 @@ simulmacd: $(COREOBJ) $(NROBJ) simulmacd.o
 
 test: $(COREOBJ) $(NROBJ) test.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) test.o -o $(APPPATH)/test -lm
-
-echo: 
-	echo $(COREPATH)
 
 clean:
 	rm -f *.o

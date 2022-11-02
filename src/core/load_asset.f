@@ -69,7 +69,7 @@ c
 
       end subroutine
 
-     subroutine load_assets(assetsfilename, env, ns, m, kx, imax, jmax, kmax)
+      subroutine load_assets(assetsfilename, env, ns, m, kx, imax, jmax, kmax)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to load_assets.f
@@ -107,12 +107,12 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       open(ird,file = assetsfilename, err = 10)
       do k=1, kmax
         read(ird,'(A)', err = 20, end=40) line
-        assetsfilename(k)=line(9:80)
+        assets(k)=line(9:80)
       end do
   40  close(ird)
       kx=k-1
       do k=1,kx
-        call load_asset_date(assetsfilename(k),env, ns(k), m, k, imax, jmax, kmax)  
+        call load_asset_date(assets(k),env, ns(k), m, k, imax, jmax, kmax)  
       end do
 
       return 
@@ -130,12 +130,10 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       close(ird)
       return
 
+      end subroutine     
 
 
-     end subroutine     
-
-
-     subroutine load_asset_date(filename,env, n, m, k, imax, jmax, kmax)
+      subroutine load_asset_date(filename,env, n, m, k, imax, jmax, kmax)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to load_market.f
@@ -193,11 +191,11 @@ c
 c
 c parse the date
 c
-        env(i,jdate,ka) = real(date2int(line(1:10)))
+        env(i,jdate,k) = real(date2int(line(1:10)))
 c
 c parse the values (OHLCD)
 c
-        read(line(11:),*, err = 30) (env(i,j,k),j=2,mm)
+        read(line(11:),*, err = 30) (env(i,j,k),j=2,m)
       enddo
       close (ird)
 
