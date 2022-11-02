@@ -21,6 +21,9 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      & 'spread_sharpe', 'spread_calmar', 'return', 'vol', 'sharpe', 'calmar' /
 
       include "macdgenerate.inc"
+      include "macdallocation.inc"
+
+      common /allocation/ IPERIODS, IMAX, JMAX
 
       integer schedule(IPERIODS,3)
       real env(1:IMAX,1:JMAX), risks(IPERIODS,4), vars(2), stratrisks(IPERIODS,4)
@@ -37,8 +40,8 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
         do j=ilong,flong, dlong
           vars(1) = real(i)
           vars(2) = real(j)
-          call macd(risks, stratrisks, vars, nvars, schedule, nperiods, env, imax, jmax, kmax)
-          call print_simul_risks(irdx, vars, nvars, schedule, risks, stratrisks, nperiods)
+          call macd(risks, stratrisks, vars, nvars, schedule, iprds, env, in, jn)
+          call print_simul_risks(irdx, vars, nvars, schedule, risks, stratrisks, iprds)
         end do
       end do
 
@@ -46,7 +49,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end program
 
-      subroutine macd(risks, stratrisks, vars, nvars, schedule, nperiods, env, imax, jmax, kmax)
+      subroutine macd(risks, stratrisks, vars, nvars, schedule, iprds, env, in, jn)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c macd.f
@@ -71,19 +74,22 @@ c     risks    : real(nperiods,4) : excess risks over the index
 c     stratrisk:  real(nperiods,4): strategy risks 
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer imax, jmax, kmax, nperiods, nvars, isht, ilng,k,i, nstart
+      integer in, jm, iprds, nvars, isht, ilng,i, nstart
       integer jopen, jhigh, jlow, jclose,jpdiv, jplog
       integer jstema, jlgema, jtslpema
       real alphast, alphalg 
       integer jret, jnav
       integer jcrs, jrst, jnavs
+      integer IMAX, JMAX, IPERIODS
 
       integer ird, irdx, iwr, iwrx, ier
 
       include "macd.inc"
-      integer schedule(nperiods,3)
-      real indexrisk(nperiods,4), stratrisks(nperiods,4), env(imax,jmax,kmax)
-      real risks(nperiods,4), vars(nvars)
+      include "macdallocation.inc"
+
+      integer schedule(IPERIODS,3)
+      real indexrisk(IPERIODS,4), stratrisks(IPERIODS,4), env(IMAX,JMAX)
+      real risks(IPERIODS,4), vars(nvars)
       intrinsic alog
       common /cfile/ ird
       common /cerror/ iwr,ier
@@ -100,25 +106,24 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       alphast = 2./(1. + vars(isht))
       alphalg = 2./(1. + vars(ilng))
 
-      do i=1,imax
-        do k=1,kmax
-          call unary(alog,i,env(1,jplog,k), env(1,jclose,k))
-          call ema(alphast, i, env(1,jstema,k), env(1, jplog, k))
-          call ema(alphalg, i, env(1,jlgema,k), env(1, jplog, k))
-          call ema(0.05, i, env(1,jtslpema,k), env(1, jplog, k))
-          call indmacd(i, env(1,jcrs,k), env(1,jlgema,k), env(1,jstema,k), env(1,jtslpema,k))
+      do i=1,in
+        call unary(alog,i,env(1,jplog), env(1,jclose))
+        call ema(alphast, i, env(1,jstema), env(1, jplog))
+        call ema(alphalg, i, env(1,jlgema), env(1, jplog))
+        call ema(0.05, i, env(1,jtslpema), env(1, jplog))
+        call indmacd(i, env(1,jcrs), env(1,jlgema), env(1,jstema), env(1,jtslpema))
 
-          call ret(i, env(1,jret,k), env(1, jpdiv,k))
-          call rebase(nstart, i, env(1,jnav,k), env(1, jret,k))
-          
-          call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k))
-          call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k))
+        call ret(i, env(1,jret), env(1, jpdiv))
+        call rebase(nstart, i, env(1,jnav), env(1, jret))
+        
+        call retcond(chg, slip, i, env(1,jrst), env(1,jret), env(1,jcrs))
+        call rebase(nstart, i, env(1, jnavs), env(1, jrst))
         enddo
       enddo
 
-      call schedulerisks(schedule, stratrisks,nperiods,env(1,jnavs,1),imax)
-      call schedulerisks(schedule, indexrisk,nperiods,env(1,jnav,1),imax)
-      call diffmatrix(risks,stratrisks,indexrisk,nperiods,4)
+      call schedulerisks(schedule, stratrisks,ipdrs,env(1,jnavs),in)
+      call schedulerisks(schedule, indexrisk,ipdrs,env(1,jnav),in)
+      call diffmatrix(risks,stratrisks,indexrisk,ipdrs,4)
 
       end subroutine
  

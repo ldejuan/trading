@@ -92,8 +92,10 @@ c
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       integer n, m, jret, jvol, jsharpe,jcalmar,ii,il,i,j
-      integer sched(m,3)
-      real riskv(m,4), prcs(n)
+      integer IPERIODS, IMAX, JMAX
+      common /allocation/ IPERIODS, IMAX, JMAX
+      integer sched(IPERIODS,3)
+      real riskv(IPERIODS,4), prcs(n)
       parameter(jret=1, jvol=2, jsharpe=3, jcalmar=4)
       j=1
       do i=1,m
