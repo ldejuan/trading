@@ -72,7 +72,7 @@ c     stratrisk:  real(nperiods,4): strategy risks
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       integer imax, jmax, kmax, nperiods, nvars, isht, ilng,k,i, nstart
-      integer jopen, jhigh, jlow, jclose,jpdiv
+      integer jopen, jhigh, jlow, jclose,jpdiv, jplog
       integer jstema, jlgema, jtslpema
       real alphast, alphalg 
       integer jret, jnav
@@ -101,9 +101,10 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       do i=1,imax
         do k=1,kmax
-          call ema(alphast, i, env(1,jstema,k), env(1, jclose, k), imax)
-          call ema(alphalg, i, env(1,jlgema,k), env(1, jclose, k), imax)
-          call ema(0.05, i, env(1,jtslpema,k), env(1, jclose, k), imax)
+          call unary(log,i,env(1,jplog,k), env(1,jclose,k), imax)
+          call ema(alphast, i, env(1,jstema,k), env(1, jplog, k), imax)
+          call ema(alphalg, i, env(1,jlgema,k), env(1, jplog, k), imax)
+          call ema(0.05, i, env(1,jtslpema,k), env(1, jplog, k), imax)
           call indmacd(i, env(1,jcrs,k), env(1,jlgema,k), env(1,jstema,k), env(1,jtslpema,k), imax)
 
           call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)

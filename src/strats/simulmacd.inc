@@ -1,9 +1,9 @@
-      parameter(imax=8258,jmax=13, kmax=1,jheaderx=14)
+      parameter(imax=8258,jmax=14, kmax=1,jheaderx=14)
       parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
-      parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5)
-      parameter(jstema=6, jlgema=7,jtslpema=8)
-      parameter(jret=9, jnav=10)
-      parameter(jcrs=11, jrst=12,jnavs=13)
+      parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5,jplog=6)
+      parameter(jstema=7, jlgema=8,jtslpema=9)
+      parameter(jret=10, jnav=11)
+      parameter(jcrs=12, jrst=13,jnavs=14)
       parameter(nshort=50, nlong=250, nbyears=40)
 
   ! imax  : is the number of bars in the market data
@@ -20,6 +20,7 @@
   ! jclose: column index of the close price in a bar
   ! jlow  : column index of the low price in a bar
   ! jpdiv : column index of dividend reinvested in a bar
+  ! jplog : column index of log price in a bar
   ! jstema: column index of the short ema
   ! jlgema : column index of the long ema
   ! jtslpema : column index of the slope ema

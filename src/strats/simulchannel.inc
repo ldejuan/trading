@@ -1,9 +1,9 @@
-      parameter(imax=8258,jmax=12, kmax=1)
+      parameter(imax=8258,jmax=13, kmax=1)
       parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
-      parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5)
-      parameter(jmaxhigh=6, jminlow=7)
-      parameter(jret=8, jnav=9)
-      parameter(jcrs=10, jrst=11,jnavs=12)
+      parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5,jplog=6)
+      parameter(jmaxhigh=7, jminlow=8)
+      parameter(jret=9, jnav=10)
+      parameter(jcrs=11, jrst=12,jnavs=13)
       parameter(nbbarshigh=26, nbbarslow=28)
 
   ! imax  : is the number of bars in the market data
@@ -19,6 +19,7 @@
   ! jclose: column index of the close price in a bar
   ! jlow  : column index of the low price in a bar
   ! jpdiv : column index of dividend reinvested in a bar
+  ! jplog : column index of log closing  price in a bar
   ! jminhigh: column index of the running minimum high prices
   ! jmaxlow : column index of the running maximum low prices
 
