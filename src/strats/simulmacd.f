@@ -11,9 +11,9 @@ c inputs:
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/
-      integer i,j,imax,jmax,kmax, nn,mm,kk
+      integer i,j,IMAX,JMAX,in,jm, ipds
       integer ishort, fshort, dshort, ilong, flong, dlong
-      integer nperiods, nvars
+      integer IPERIODS, nvars
       character*15 headers(11)
       integer ird, irdx, iwr, iwrx
 
@@ -22,12 +22,12 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       include "macdgenerate.inc"
 
-      integer schedule(nperiods,3)
-      real env(1:imax,1:jmax,1:kmax), risks(nperiods,4), vars(2), stratrisks(nperiods,4)
-      character dates(1:imax,1:kmax)*10
+      integer schedule(IPERIODS,3)
+      real env(1:IMAX,1:JMAX), risks(IPERIODS,4), vars(2), stratrisks(IPERIODS,4)
+      character dates(1:IMAX)*10
 
-      call load_asset(assetfilename,env, dates, nn, mm, kk, kmax)
-      call gen_schedule('A', schedule, nperiods, dates(1,1), imax)
+      call load_asset(assetfilename,env, dates, in,jm)
+      call gen_schedule('A', schedule, dates, in, ipds)
 
 
       open(irdx, file='simul_macd.csv')
@@ -84,6 +84,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer schedule(nperiods,3)
       real indexrisk(nperiods,4), stratrisks(nperiods,4), env(imax,jmax,kmax)
       real risks(nperiods,4), vars(nvars)
+      intrinsic alog
       common /cfile/ ird
       common /cerror/ iwr,ier
       real chg,slip
@@ -101,17 +102,17 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       do i=1,imax
         do k=1,kmax
-          call unary(log,i,env(1,jplog,k), env(1,jclose,k), imax)
-          call ema(alphast, i, env(1,jstema,k), env(1, jplog, k), imax)
-          call ema(alphalg, i, env(1,jlgema,k), env(1, jplog, k), imax)
-          call ema(0.05, i, env(1,jtslpema,k), env(1, jplog, k), imax)
-          call indmacd(i, env(1,jcrs,k), env(1,jlgema,k), env(1,jstema,k), env(1,jtslpema,k), imax)
+          call unary(alog,i,env(1,jplog,k), env(1,jclose,k))
+          call ema(alphast, i, env(1,jstema,k), env(1, jplog, k))
+          call ema(alphalg, i, env(1,jlgema,k), env(1, jplog, k))
+          call ema(0.05, i, env(1,jtslpema,k), env(1, jplog, k))
+          call indmacd(i, env(1,jcrs,k), env(1,jlgema,k), env(1,jstema,k), env(1,jtslpema,k))
 
-          call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)
-          call rebase(nstart, i, env(1,jnav,k), env(1, jret,k),imax)
+          call ret(i, env(1,jret,k), env(1, jpdiv,k))
+          call rebase(nstart, i, env(1,jnav,k), env(1, jret,k))
           
-          call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k), imax)
-          call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k), imax)
+          call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k))
+          call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k))
         enddo
       enddo
 

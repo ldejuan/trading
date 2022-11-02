@@ -1,4 +1,4 @@
-      subroutine ret(i, ys, xs, ix)  
+      subroutine ret(i, ys, xs)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ret.f : function to calculate  the period asset returns over a period²e
@@ -9,16 +9,15 @@ c     return(i) = price(i)/price(i-1) - 1.
 c
 c inputs :   
 c     i    : integer   :row index of the bar  to calculate the filter values 
-c     ys  : real(ix) :vector of inputs : to store the output values
-c     xs  : real(ix) :vector of outputs of the timeseries 
-c     ix  : integer   : row dimension of the inputs timeseries
+c     ys  : real(1:i) :vector of inputs : to store the output values
+c     xs  : real(1:i) :vector of outputs of the timeseries 
 c outputs :
 c
 c outputs :
 c    the value of the filter is stored in ys(i)
       implicit none
       integer i,ix,i1
-      real xs(ix), ys(ix)
+      real xs(1:i), ys(1:i)
 c calculate previous bar
       i1=i-1
       if (i .eq. 1) then

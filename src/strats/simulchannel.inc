@@ -1,19 +1,16 @@
-      parameter(imax=8258,jmax=13, kmax=1)
-      parameter(nn=8258,mm=5,kk=1,irdx=10,iwrx=0)
+      parameter(IMAX=10000,JMAX=20)
+      parameter(jm=5,irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5,jplog=6)
       parameter(jmaxhigh=7, jminlow=8)
       parameter(jret=9, jnav=10)
       parameter(jcrs=11, jrst=12,jnavs=13)
       parameter(nbbarshigh=26, nbbarslow=28)
 
-  ! imax  : is the number of bars in the market data
-  ! jmax  : is the total number of properties of the simulation
-  ! kmax  : is the total number of assets in the simulation
-  ! nn    : number of bars to read
-  ! mm    : number of bars parameter to read
+  ! iMAX  : is the number of bars in the market data
+  ! jMAX  : is the total number of properties of the simulation
+  ! jm    : number of bars parameter to read
   ! irdx  :  index of I/O file
   ! iwrx  :  index of I/O file for errors (0:stderr, 5:stdin, 6: stdout)
-  ! kk    : depth index of the asset to read in a bar
   ! jopen : column index of the open price in a bar
   ! jhigh : column index of the high price in a bar
   ! jclose: column index of the close price in a bar

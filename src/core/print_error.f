@@ -22,3 +22,16 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       return
 
       end subroutine
+
+      subroutine logger(level, text)
+      implicit none
+
+      character*(*) text
+      character*10 level
+
+      logical ier
+      integer iwr
+      common /cerror/iwr,ier
+      ier = .TRUE.
+      write(iwr,'*(a)') level, text
+      return

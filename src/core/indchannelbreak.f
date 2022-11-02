@@ -1,4 +1,4 @@
-      subroutine indchannelbreak(i, ys, xmaxs, xmins, xhighs, xlows, ix)
+      subroutine indchannelbreak(i, ys, xmaxs, xmins, xhighs, xlows)
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  indchanelbreak : function to calculate a the channel break through indicator for long strategies
@@ -7,19 +7,18 @@ c                    If the LowPrice < Moving Average of Max Low Price : SELL
 c
 c inputs :
 c     i         : integer       :row time bar to be calculated
-c     xmaxs     : real(1:ix)    : time series of moving max of high prices
-c     xmins     : real(1:ix)    : time series of moving min of low prices
-c     xhighs    : real(ix)      : time series of high price 
-c     xlows     : real(ix)      : time series of low price 
-c     ix        : integer         : row dimension of the env variables
+c     xmaxs     : real(1:i)    : time series of moving max of high prices
+c     xmins     : real(1:i)    : time series of moving min of low prices
+c     xhighs    : real(1:i)      : time series of high price 
+c     xlows     : real(1:i)      : time series of low price 
 c                         (total number of bars)
 c outputs :
-c     ys     : real(1:ix)    : output indicator position at the bar (1: long, 0: no position)  
+c     ys     : real(1:i)    : output indicator position at the bar (1: long, 0: no position)  
 c    the value of the ema at ib is stored in the jo, ka
 c    position of the env variable
       implicit none
-      integer i, ix,i1
-      real ys(ix), xmaxs(ix), xmins(ix), xhighs(ix), xlows(ix)
+      integer i,i1
+      real ys(1:i), xmaxs(1:i), xmins(1:i), xhighs(1:i), xlows(1:i)
       i1 = i-1 
       if (i .eq. 1) then
         ys(i) = 0.

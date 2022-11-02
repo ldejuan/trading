@@ -133,7 +133,7 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine gen_schedule(freq, schedule, mmax, sdates, nmax)
+      subroutine gen_schedule(freq, schedule, sdates, ipds, in)
 c  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c 
 c     gen_schedule.f : subroutine to generate a schedule over a list of dates
@@ -141,22 +141,25 @@ c      at different frequencies
 c
 c     input :
 c        freq : char :A,S,Q,M : annual, semi annual, quarter, monthly
-c        sdates : character*10(nmax) : dates over which the schedule is generated
-c        nmax  : integer    : length of the dates vector
+c        sdates : character*10(in) : dates over which the schedule is generated
+c        in  : integer    : length of the dates vector
 c     output:
-c        schedule : integer(mmax,3) : where 
+c        schedule : integer(iPERIODS,3) : where 
 c            schedule(i,1) date index of the start of the period
 c            schedule(i,2) date index of the end of the period
 c            schedule(i,3) last date in format YYYYMMDD as int of the period
-c        iperiods : integer : number of maximum periods to consider
+c        ipds : integer : number of maximum periods to consider
+c        
 c
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer i,mmax, nmax, y,m,d, yp,ip,j,k, iperiods
-      character*10 sdates(nmax)
-      integer schedule(mmax, 3), date2int
+      integer i,y,m,d, yp,ip,j,k,ipds,IPERIODS
+      character*10 sdates(1:in)
+      integer date2int
       character freq
       external date2int
+      parameter(IPERIODS = 20)
+      integer schedule(IPERIODS, 3)
 
 
       if (freq .ne. 'A') then
@@ -166,7 +169,7 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       call date2ymd(yp,m,d, sdates(1))
       ip = 1
       j = 1
-      do i=2, nmax
+      do i=2, in
         call date2ymd(y,m,d,sdates(i))
         if (y .ne. yp) then
 c    do not forget the start of the period is at endofday of the previous date
@@ -183,18 +186,10 @@ c ensure last
 
       if (y .eq. yp) then
         schedule(j,1)=ip-1
-        schedule(j,2)=nmax
-        schedule(j,3)=date2int(sdates(nmax))
+        schedule(j,2)=in
+        schedule(j,3)=date2int(sdates(in))
       end if
-      iperiods = j
-           
-c fill last 
-      do k=j+1,mmax
-        schedule(k,1)=schedule(j,1)
-        schedule(k,2)=schedule(j,2)
-        schedule(k,3)=schedule(j,3)   
-      end do 
-
+      ipds = j
 
       end subroutine
 

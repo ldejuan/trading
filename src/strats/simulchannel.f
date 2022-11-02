@@ -14,8 +14,8 @@ c
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/ 
-      integer i,k, ird, iwr, iwrx, irdx, nn, mm, kk, imax, jmax, kmax
-      integer jopen, jhigh, jlow, jclose,jpdiv
+      integer i, in, ird, iwr, iwrx, irdx,  jm, iMAX, jMAX
+      integer jopen, jhigh, jlow, jclose,jpdiv, jplog
 
       integer jmaxhigh, jminlow
       integer nbbarshigh, nbbarslow,nstart
@@ -32,30 +32,29 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       include "simulchannel.inc"
 c
 c env : global environnement with all the data 
-c     env(i,j,k): i: bars, j: proprietes, k: asset
+c     env(i,j): i: bars, j: proprietes, k: asset
 c
       
-      real env(1:imax,1:jmax,1:kmax)
-      character dates(1:imax,1:kmax)*10
+      real env(1:IMAX,1:JMAX)
+      character dates(1:IMAX)*10
       common /cfile/ird
       common /cerror/iwr,ier
       ird = irdx
       iwr = iwrx
       nstart = max(nbbarshigh,nbbarslow)
 
-      call load_asset(assetfilename,env, dates, nn,mm,kk, kmax)
+      call load_asset(assetfilename, env, dates, in, jm)
 c
 c start of the simulation 
 c
-      do i=1,imax
-        do k=1,kmax
-          call movmax(nbbarshigh, i, env(1,jmaxhigh,k) , env(1, jhigh, k), imax)
-          call movmin(nbbarslow, i, env(1,jminlow,k) , env(1, jlow, k), imax)
-          call indchannelbreak(i, env(1,jcrs,k), env(1,jmaxhigh,k), env(1,jminlow,k), env(1,jhigh,k), env(1,jlow,k), imax)
-          call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)
-          call rebase(nstart, i, env(1,jnav,k), env(1, jret,k),imax)
-          call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k), imax)
-          call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k), imax)
+      do i=1,in
+        call movmax(nbbarshigh, i, env(1,jmaxhigh,k) , env(1, jhigh, k), imax)
+        call movmin(nbbarslow, i, env(1,jminlow,k) , env(1, jlow, k), imax)
+        call indchannelbreak(i, env(1,jcrs,k), env(1,jmaxhigh,k), env(1,jminlow,k), env(1,jhigh,k), env(1,jlow,k), imax)
+        call ret(i, env(1,jret,k), env(1, jpdiv,k),imax)
+        call rebase(nstart, i, env(1,jnav,k), env(1, jret,k),imax)
+        call retcond(chg, slip, i, env(1,jrst,k), env(1,jret, k), env(1,jcrs,k), imax)
+        call rebase(nstart, i, env(1, jnavs,k), env(1, jrst, k), imax)
         enddo
       enddo
     

@@ -3,7 +3,7 @@ c
 c  v.utils.f : implements several vector like calculation 
 c
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-      subroutine cum(func, ys, n,xs)
+      subroutine cum(func, ys, n, xs)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c      map.f subroutine to calculate the running cummulative ever a vector
 c

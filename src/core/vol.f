@@ -1,4 +1,4 @@
-      subroutine vol(depth, i, yvols, xs,ix)  
+      subroutine vol(depth, i, yvols, xs)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  vol.f : function to calculate the mean and volatility  
@@ -13,14 +13,14 @@ cc
 c inputs :   
 c     depth  : integer   :depth : number of bars to calculate the vol
 c     i      : integer   :time bar to be calculated
-c     xs     : real(ix)  : time series 
+c     xs     : real(1:i)  : time series 
 c     ix     : integer   :index of the asset
 c outputs :
-c     ymeans : real(ix) : time series of the output means at i
-c     yvols  : real(ix) : time series of the output variance at i
+c     ymeans : real(1:i) : time series of the output means at i
+c     yvols  : real(1:i) : time series of the output variance at i
       implicit none
-      integer depth,i, ix, n
-      real  yvols(ix), xs(ix), yrvolfc, var, mean
+      integer depth,i,n
+      real  yvols(1:i), xs(1:i), yrvolfc, var, mean
       parameter(yrvolfc = 15.8745078664)
 c calculate previous bar
       n = min(i, depth)

@@ -1,4 +1,4 @@
-      subroutine ema(alpha, i, ys, xs, ix)  
+      subroutine ema(alpha, i, ys, xs)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ema.f : function to calculate an exponential moving average
@@ -17,8 +17,8 @@ c     ix  : integer   : row dimension of the inputs timeseries
 c outputs :
 c     ys  : real(ix) :vector of inputs : to store the output values
       implicit none
-      integer i,ix,i1
-      real alpha, xs(ix), ys(ix)
+      integer i,i1
+      real alpha, xs(1:i), ys(1:i)
 c calculate previous bar
       i1=i-1
       if (i .eq. 1) then

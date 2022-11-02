@@ -1,4 +1,4 @@
-      subroutine indcross(long, i, ys, xlngs, xshts, ix)
+      subroutine indcross(long, i, ys, xlngs, xshts)
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  ema.f : function to calculate a single cross indicator of two moving
@@ -13,18 +13,18 @@ c inputs :
 c     long   : logical       :if .TRUE. long only strategy 
 c     i      : integer       :row time bar to be calculated
 c                            : environnement of the simulation
-c     ys     : real(1:ix)    : output indicator
-c     xlgns  : real(1:ix)    : time series of the long moving average
-c     xshts  : real(1:ix)    : time series of the short moving average
+c     ys     : real(1:i)    : output indicator
+c     xlgns  : real(1:i)    : time series of the long moving average
+c     xshts  : real(1:i)    : time series of the short moving average
 c     ix   : integer         : row dimension of the env variables
 c                         (total number of bars)
 c outputs :
 c    the value of the ema at ib is stored in the jo, ka
 c    position of the env variable
       implicit none
-      integer i, ix
+      integer i
       logical long
-      real alpha, ys(ix), xlngs(ix), xshts(ix)
+      real alpha, ys(1:i), xlngs(1:i), xshts(1:i)
       if ( xlngs(i) .le. xshts(i) ) then 
         ys(i) = 1.
       else

@@ -5,7 +5,7 @@ services:
         container_name: gcc
         command: /bin/bash
         volumes:
-            - c:\users\ldejuan\work\aaData\home:/root
+            - /mnt/c/Users/ldejuan/work/aaData/home:/root
         deploy:
             resources:
                 limits:

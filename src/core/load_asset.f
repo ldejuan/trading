@@ -1,9 +1,9 @@
-      subroutine load_asset(filename, env, dates, nn, mm, ka, kx)
+      subroutine load_asset(filename, env, dates, in, jm)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
-c  subrouutine to load_market.f
+c  subroutine to load_market.f
 c
-c To load a market bars as OLCHP are other values 
+c To load a single market bars as OLCHP are other values 
 c
 c The values should be describe as:
 c YYYYMMDD XXXX.X XXXXX.XX XXXXX.X XXXXX.X 
@@ -12,34 +12,41 @@ c XXXXX.XX are values of the given property : they will be transformed
 c ton float 32
 c input 
 c   filename : character(80): full name with path of the asset file name
-c   nn       : integer      : number of values to read
-c   mm       : integer      : number of properties to read
-c   ka       : integer      : index of the asset to store into
-c   kx       : integer      : number of maximum assets 
+c   in        : integer      : number of values to read
+c   jm        : integer      : number of properties to read
+c
 c       / ird  : unit to read file
 c output :
-c    env      : real(nn,mm,kx)         : env variable for the simulation
-c    dates    : character(nn,kx)*10    : dates for the simulation
+c    env      : real(IMAX, JMAX)         : env variable for the simulation
+c    dates    : character(NMAX)*10    : dates for the simulation
+c    in        : actual number of dates read
 c                                as a function of the assets
 c     The function will insert the values in the  
-c       env(i,j,kk)
-c       dates(i,kk)
+c       env(i,j)
+c       dates(i)
 c
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 filename
       character*100 line
-      integer i,j,nn,mm,ka, ird,kx
-      real env(1:nn,1:mm,1:kx)
-      character dates(1:nn,1:kx)*10
+      integer i,j,in,jm,ird
+      integer IMAX, JMAX
+      parameter (IMAX = 10000, JMAX = 20)
+      real env(IMAX,JMAX)
+      character dates(IMAX)*10
       common /cfile/ ird
 
+      if (jm .lt. JMAX) then 
+        call print_error('number of propreties to read larger than JMAX')
+        return 
+      end if 
+
       open(ird,file = filename, err = 10)
-      do i=1,nn
+      do i=1,IMAX
 c      
 c read a line as a string
 c
-        read(ird,'(A)', err = 20) line
+        read(ird,'(A)', err = 20, end=1) line
 c
 c parse the date
 c
@@ -47,25 +54,29 @@ c
 c
 c parse the values (OHLCD)
 c
-        read(line(11:),*, err = 30) (env(i,j,ka),j=1,mm)
+        read(line(11:),*, err = 20, end=1) (env(i,j),j=1,jm)
       enddo
-      close (ird)
 
+      call logger('warning', 'data length greater than iMAX')
+      close (ird)
+      return
+
+   1  call logger('info', 'end of file found')
+      close(ird)
       return
 c 
 c error section 
 c 
-  10  call print_error('load_asset : error opening file')
+
+
+  10  call logger('error','load_asset : error opening file')
       close(ird)
       return
 
-  20  call print_error('load_asset : Error reading bars')
+  20  call logger('error', 'load_asset : Error reading bars')
       close(ird)
       return
-
-  30  call print_error('load_asset : Error reading values')
-      close(ird)
-      return
+ 
 
       end subroutine
 

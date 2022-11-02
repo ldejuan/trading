@@ -1,4 +1,4 @@
-      subroutine retcond(chg, slip,  i, ys, xrets, xinds,  ix)
+      subroutine retcond(chg, slip,  i, ys, xrets, xinds)
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  retcond.f : function to calculate the return over a conditional indicator
@@ -14,16 +14,16 @@ c inputs :
 c     chg   :real     :cost of a entry - sold position in unit of returns
 c     split :real     :splithedge in % of the return
 c     i     :integer  :time bar to be calculated
-c     xrets :read(ix) :input asset return time series of the prices 
-c     xinds :real(ix) :input indicator time series
-c     ix    : integer :row dimension of the inputs
+c     xrets :read(1:i) :input asset return time series of the prices 
+c     xinds :real(1:i) :input indicator time series
+c
 c outputs :
-c     ys    :real(ix) : output time series where the condret must be stored
+c     ys    :real(1:i) : output time series where the condret must be stored
 
       implicit none
       integer i, ix
       real chg, slip, cost 
-      real ys(ix), xrets(ix), xinds(ix)
+      real ys(1:i), xrets(1:i), xinds(1:i)
       integer i1
       i1 = i-1
       if (i .eq. 1) then

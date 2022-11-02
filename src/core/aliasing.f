@@ -1,20 +1,19 @@
-      subroutine aliasing(i, ys, xs,ix)  
+      subroutine aliasing(i, ys, xs)  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  aliasing.f : implements and anti-aliasing filter from ehler low pass filter  
 c
 c inputs :
-c     i    : integer   :row index of the bar  to calculate the filter values 
-c     ys  : real(ix) :vector of inputs : to store the output values
-c     xs  : real(ix) :vector of outputs of the timeseries 
-c     ix  : integer   : row dimension of the inputs timeseries
+c     i   : integer   :row index of the bar  to calculate the filter values 
+c     ys  : real(1:i) :vector of inputs : to store the output values
+c     xs  : real(1:i) :vector of outputs of the timeseries 
 c
 c outputs :
 c    the value of the filter is stored in ys(i)
 
       implicit none
-      integer i,ix,i1,i2,i3
-      real xs(ix), ys(ix)
+      integer i,i1,i2,i3
+      real xs(1:i), ys(1:i)
       if (i .le. 3) then
         ys(i) = xs(i)
       else
