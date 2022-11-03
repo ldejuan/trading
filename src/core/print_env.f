@@ -1,4 +1,4 @@
-      subroutine print_env(ird, env, dates,ix,jx,kx)
+      subroutine print_env(ird, in, jm, env, IMAX, JMAX)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to print_env.f
@@ -7,72 +7,28 @@ c  This function will print of the environement variabless to a
 c  open filename
 c
 c input 
-c   ird      : integer      : index of the I/O to write to 
-c   env      : real(ix,jx,kx): the simulation outputd
-c   dates    : character(ix,kx)*10)  : dates for each assets/bars
-c   ix       : integer      : number of rows in env 
-c   jx       : integer      : number of proprietes in env:
-c   kx       : integer      : number of assets to outputs 
+c   ird      : integer      : index of the I/O to write to
+c   in       : integer      : number of dates to print
+c   jm       : integer      : number of propreties to print
+c
+c   in the environment variables
+c
+c   env      : real(iMAX, JMAX): the simulation outputd
+c
+c   IMAX     : integer      : MAX number of rows in env 
+c   JMAX     : integer      : MAX number of proprietes in env:
+
 c       / ird  : unit to read file
-c output :
-c    env      : real(nn,mm,kx)         : env variable for the simulation
-c    dates    : character(nn,kx)*10    : dates for the simulation
-c                                as a function of the assets
-c     The function will insert the values in the  
-c       env(i,j,kk)
-c       dates(i,kk)
 c
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer ird,ix,jx,kx,i,j,k
-      real env(ix,jx,kx)
-      character dates(ix,kx)*10
+      integer ird, IMAX, JMAX, in, jm, i,j
+      real env(1:IMAX,1:JMAX)
 
-      do k=1,kx
-        do i=1,ix
-          write(*,*) i,dates(i,k),(env(i,j,k),j=1,jx)
-        enddo
+      do i=1,in
+        write(ird,*) (env(i,j),j=1,jm)
       enddo
-
-      end subroutine
-
-      subroutine print_env_date(ird, env, nmaxs, ix, jx, kx)
-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c
-c  subrouutine to print_env.f
-c
-c  This function will print of the environement variabless to a 
-c  open filename
-c
-c input 
-c   ird      : integer      : index of the I/O to write to 
-c   env      : real(ix,jx,kx): the simulation outputd
-c   nmaxs      : integer(kx) : number of rows in env 
-c   ix       : integer      : number of proprietes in env:
-c   iMAX       : integer      : number of assets to outputs 
-c   kx  
-c    jx         :
-c    / ird  : unit to read file
-c output :
-c    env      : real(nn,mm,kx)         : env variable for the simulation
-c    dates    : character(nn,kx)*10    : dates for the simulation
-c                                as a function of the assets
-c     The function will insert the values in the  
-c       env(i,j,kk)
-c       dates(i,kk)
-c
-c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-      implicit none
-      integer ird,ix,jx,kx,i,j,k
-      real env(ix,jx,kx)
-      integer nmaxs(kx)
-
-      do k=1,kx
-        do i=1,nmaxs(k)
-          write(*,*) i, (env(i,j,k),j=1,jx)
-        enddo
-      enddo
-
+      
       end subroutine
 
       subroutine print_risks(ird, freq, riskv, n, dates, m)

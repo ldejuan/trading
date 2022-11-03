@@ -155,7 +155,7 @@ c
 c
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer i,y,m,d, yp,ip,j,k,ipds,IPERIODS
+      integer i,y,m,d, yp,ip,j,k,ipds,IPERIODS,in
       character*10 sdates(1:in)
       integer date2int
       character freq

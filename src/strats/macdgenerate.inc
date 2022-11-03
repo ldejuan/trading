@@ -1,4 +1,4 @@
-      parameter(jm=5,irdx=10,iwrx=0)
+      parameter(IMAX=10000, JMAX=20, jm=6,irdx=10,iwrx=0)
       parameter(ishort=10, fshort=50, dshort=5)
       parameter(ilong=60, flong=260, dlong=10)
       parameter(nvars=2)

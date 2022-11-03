@@ -24,6 +24,18 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       end subroutine
 
       subroutine logger(level, text)
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     logger subroutine
+c     Will print in the iwr an logger message and set the
+c     logical variable ier to .TRUE.
+c     subroutine from s6 code
+c     inputs: 
+c       text : type character of variable lenght 
+c     common /cerror/ iwr, ier 
+c       iwr : index of the I/O File output
+c       ier : logical : error message
+c
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
 
       character*(*) text
@@ -33,5 +45,7 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer iwr
       common /cerror/iwr,ier
       ier = .TRUE.
-      write(iwr,'*(a)') level, text
+      write(iwr,'(*(a))') level, text
       return
+
+      end subroutine
