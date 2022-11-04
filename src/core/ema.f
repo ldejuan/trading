@@ -10,15 +10,15 @@ c
 c      alpha = 2/(N+1) for N terms in a moving average
 c
 c inputs :
-c     alpha: real      : ema factors   
+c     alpha: double precision      : ema factors   
 c     i    : integer   :row index of the bar  to calculate the filter values 
-c     xs  : real(ix) :vector of outputs of the timeseries 
+c     xs  : double precision(ix) :vector of outputs of the timeseries 
 c     ix  : integer   : row dimension of the inputs timeseries
 c outputs :
-c     ys  : real(ix) :vector of inputs : to store the output values
+c     ys  : double precision(ix) :vector of inputs : to store the output values
       implicit none
       integer i,i1
-      real alpha, xs(1:i), ys(1:i)
+      double precision alpha, xs(1:i), ys(1:i)
 c calculate previous bar
       i1=i-1
       if (i .eq. 1) then

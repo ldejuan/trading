@@ -8,12 +8,12 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 c
 c square fonction
-c      input : x real
+c      input : x double precision
 c      output: x*x 
 c
       function square(x)
       implicit none
-      real x,square
+      double precision x,square
 
       square = x**2
       return
@@ -26,7 +26,7 @@ c      input : x second order moment
 c              y mean value
 c
       implicit none
-      real x,y,factor,stdev
+      double precision x,y,factor,stdev
 
 c     factor = sqrt(252)**(252-1)/252
       parameter (factor=15.811513787553) 
@@ -41,7 +41,7 @@ c      input : x second order moment
 c              y mean value
 c
       implicit none
-      real x,y,rate
+      double precision x,y,rate
       rate = y/x - 1.
       return
       end function

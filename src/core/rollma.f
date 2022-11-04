@@ -14,15 +14,15 @@ c inputs :
 c     nbars :integer  :number of periods (nbars)of the rolling 
 c inputs :
 c     i    : integer   :row index of the bar  to calculate the filter values 
-c     xs  : real(1:i) :vector of outputs of the timeseries 
+c     xs  : double precision(1:i) :vector of outputs of the timeseries 
 c
 c outputs :
-c     ys  : real(1:i) :vector of inputs : to store the output values
+c     ys  : double precision(1:i) :vector of inputs : to store the output values
 c outputs :
 c    the value of the filter is stored in ys(i)
       implicit none
       integer i,nbars, ix
-      real ys(1:i), xs(1:i), res, alpha
+      double precision ys(1:i), xs(1:i), res, alpha
 c calculate previous bar
       if (i .eq. 1) then
         res = xs(i)

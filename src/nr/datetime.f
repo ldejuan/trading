@@ -18,6 +18,27 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
+      subroutine ddate2ymd(y,m,d, ddate)      
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c  function to get the y,,m,d only o a date with format  DD/MM/YYYY
+c    
+c   inputs:
+c     ddate : double precision as YYYYMMDD
+c   outputs:
+c      y : integer : year
+c      m : integer : months
+c      d : integer : days
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+      double precision ddate
+      integer y,m,d
+
+      y = int(ddate / 10000)
+      m = int((ddate - 10000 * y)/100)
+      d = int(ddate - 10000*y - m*100)
+
+      end subroutine
+
       function date2int(sdate)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c   function to transform a string date : DD/MM/YYYY as a integer date
@@ -34,7 +55,7 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       date2int = y * 10000 + m * 100 + d
 
       return
-      end function  
+      end function
 
       function date2jed(sdate)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -667,7 +688,7 @@ c    BC 4713/01/01 => JED = 0.0 was noon on a Monday.
 c
 c    jedmod = mod ( 0.0D+00, 7.0D+00 ) = 0.0D+00
 c    j = mod ( nint ( 0 ), 7 ) = 0
-c    f = ( 0.0D+00 + 0.5D+00 ) - real ( j ) = 0.5D+00
+c    f = ( 0.0D+00 + 0.5D+00 ) - double precision ( j ) = 0.5D+00
 c    w = i4_wrap ( 0 + 2, 1, 7 ) = 2 = MONDAY
 c
 c  Licensing:

@@ -7,15 +7,15 @@ c
 c inputs :
 c     nbbars:integer    : windows size  
 c     i     : integer   :row index of the bar  to calculate the filter values 
-c     xs    : real(1:i) :vector of inputs (prices) of the timeseries 
+c     xs    : double precision(1:i) :vector of inputs (prices) of the timeseries 
 c     ix    : integer   : row dimension of the inputs timeseries
 c
 c outputs :
-c     ys    : real(1:i) :vector of outputs : moving min 
+c     ys    : double precision(1:i) :vector of outputs : moving min 
 
       implicit none
       integer i,ix, nbbars, n, j
-      real xs(1:i), ys(1:i), rmin
+      double precision xs(1:i), ys(1:i), rmin
       n = min(i,nbbars)
       rmin = 1000000.
       do j=1,n

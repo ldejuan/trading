@@ -20,13 +20,13 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       integer jstema, jlgema, jtslpema
       integer nshort, nlong
-      real alphast, alphalg 
+      double precision alphast, alphalg 
 
       integer jret, jnav
       integer jcrs, jrst, jnavs 
       integer nst,nlg,nyr, nbdays, nbyears, startday
 
-      real chg,slip
+      double precision chg,slip
       data chg /1.e-5/
       logical ier
       include "simulmacd.inc"
@@ -55,9 +55,9 @@ c env : global environnement with all the data
 c     env(i,j,k): i: bars, j: proprietes, k: asset
 c
       
-      real env(1:imax,1:jmax,1:kmax)
+      double precision env(1:imax,1:jmax,1:kmax)
       character dates(1:imax,1:kmax)*10
-      real indexrisk(1:nbyears,4), stratrisk(1:nbyears,4), excesrisk(1:nbyears,4)
+      double precision indexrisk(1:nbyears,4), stratrisk(1:nbyears,4), excesrisk(1:nbyears,4)
       integer sched(1:nbyears, 3), nsched
       common /cfile/ird
       common /cerror/iwr,ier

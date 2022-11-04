@@ -1,8 +1,8 @@
       SUBROUTINE avevar(data,n,ave,var)  
       INTEGER n  
-      REAL ave,var,data(n)  
+      double precision ave,var,data(n)  
       INTEGER j  
-      REAL s,ep  
+      double precision s,ep  
       ave=0.0  
       do 11 j=1,n  
         ave=ave+data(j)  

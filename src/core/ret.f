@@ -9,15 +9,15 @@ c     return(i) = price(i)/price(i-1) - 1.
 c
 c inputs :   
 c     i    : integer   :row index of the bar  to calculate the filter values 
-c     ys  : real(1:i) :vector of inputs : to store the output values
-c     xs  : real(1:i) :vector of outputs of the timeseries 
+c     ys  : double precision(1:i) :vector of inputs : to store the output values
+c     xs  : double precision(1:i) :vector of outputs of the timeseries 
 c outputs :
 c
 c outputs :
 c    the value of the filter is stored in ys(i)
       implicit none
       integer i,ix,i1
-      real xs(1:i), ys(1:i)
+      double precision xs(1:i), ys(1:i)
 c calculate previous bar
       i1=i-1
       if (i .eq. 1) then

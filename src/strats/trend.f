@@ -20,7 +20,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer jopen,jhigh,jlow,jclose,jpdiv,jret,jals,jtrd
       integer ientps, ientpe, npole, ndepth, nperiod, nbyears
       logical ier
-      real xms,fq, evlmem
+      double precision xms,fq, evlmem
       external evlmem
       include "trend.inc"
 c
@@ -28,7 +28,7 @@ c env : global environnement with all the data
 c     env(i,j,k): i: bars, j: proprietes, k: asset
 c
       
-      real env(1:imax,1:jmax,1:kmax), coefs(1:npole), spectrum(1:nperiod, 1:nperiod)
+      double precision env(1:imax,1:jmax,1:kmax), coefs(1:npole), spectrum(1:nperiod, 1:nperiod)
       character dates(1:imax,1:kmax)*10
       common /cfile/ird
       common /cerror/iwr,ier
@@ -52,7 +52,7 @@ c calculation of the maximum entropy spectrum for one window
 c calculate the spectrum
 
       do i=nperiod, 2, -1
-        fq = 1./ real(i)
+        fq = 1./ double precision(i)
         spectrum(i,1) = fq
         spectrum(i,2) = evlmem(fq,coefs,npole,1.)
         write(*,*) i, spectrum(i,1), spectrum(i,2)

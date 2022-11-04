@@ -22,7 +22,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer jvol 
       integer nst,nlg,nyr, nbdays
       logical long
-      real ast,alg,chg,square,stdev, slip
+      double precision ast,alg,chg,square,stdev, slip
       external square,stdev
       data chg /1.e-5/
       data slip /0.0/
@@ -34,7 +34,7 @@ c env : global environnement with all the data
 c     env(i,j,k): i: bars, j: proprietes, k: asset
 c
       
-      real env(1:imax,1:jmax,1:kmax)
+      double precision env(1:imax,1:jmax,1:kmax)
       character dates(1:imax,1:kmax)*10
       common /cfile/ird
       common /cerror/iwr,ier

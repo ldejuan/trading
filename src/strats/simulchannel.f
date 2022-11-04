@@ -24,7 +24,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer jcrs, jrst, jnavs 
       integer nst,nlg,nyr, nbdays
 
-      real chg,slip
+      double precision chg,slip
       data chg /1.e-5/
       data slip /0.0/
       data nbdays /252/
@@ -35,7 +35,7 @@ c env : global environnement with all the data
 c     env(i,j): i: bars, j: proprietes, k: asset
 c
       
-      real env(1:IMAX,1:JMAX)
+      double precision env(1:IMAX,1:JMAX)
       character dates(1:IMAX)*10
       common /cfile/ird
       common /cerror/iwr,ier

@@ -13,14 +13,14 @@ c
 c inputs :   
 c     i        : integer   : time bar to be calculated
 c     ist      : integer   : start date to calculate the rebase at 100:
-c     ys       : real(1:i)  : vector of outputs : to store the output values
-c     xrets    : real(1:i)    : vector of inputs  asset returns  
+c     ys       : double precision(1:i)  : vector of outputs : to store the output values
+c     xrets    : double precision(1:i)    : vector of inputs  asset returns  
 c
 c outputs :
 c    the value of the return at i is stored in the ys(i) 
       implicit none
       integer i,ist,ix, i1
-      real ys(1:i),xrets(1:i)
+      double precision ys(1:i),xrets(1:i)
 c
 c calculate previous bar
 c

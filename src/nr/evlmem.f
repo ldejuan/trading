@@ -1,8 +1,8 @@
       FUNCTION evlmem(fdt,d,m,xms)  
       INTEGER m  
-      REAL evlmem,fdt,xms,d(m)  
+      double precision evlmem,fdt,xms,d(m)  
       INTEGER i  
-      REAL sumi,sumr  
+      double precision sumi,sumr  
       DOUBLE PRECISION theta,wi,wpi,wpr,wr,wtemp  
       theta=6.28318530717959d0*fdt  
       wpr=cos(theta)  

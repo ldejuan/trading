@@ -3,7 +3,7 @@
 
       character date*10
       character line*100
-      real values(6)
+      double precision values(6)
       integer i
 
       open(1,file = '../data/values.csv')

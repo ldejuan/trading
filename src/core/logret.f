@@ -10,8 +10,8 @@ c
 c
 c inputs :   
 c     i        : integer   : time bar to be calculated
-c     ys       : real(1:i)  : vector of outputs : log returns 
-c     xs       : real(1:i)  : vector of prices   
+c     ys       : double precision(1:i)  : vector of outputs : log returns 
+c     xs       : double precision(1:i)  : vector of prices   
 c     ix       : integer   : row dimension of the inputs timeseries
 c outputs :
 c    the value of the return at i is stored in the ys(i)
@@ -21,7 +21,7 @@ c    position of the env variable
       implicit none
       integer i
       integer ip
-      real xs(1:i),ys(1:i)
+      double precision xs(1:i),ys(1:i)
 c calculate previous bar
       ip=i-1
       if (i .eq. 1) then

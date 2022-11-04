@@ -18,7 +18,7 @@ c   JMAX      : integer      : MAX number of properties
 c       / ird : unit to read file
 c outputs :
 c    Defined in the environment 
-c    env       : real(IMAX, JMAX)         : env variable for the simulation
+c    env       : double precision(IMAX, JMAX)         : env variable for the simulation
 c    in        : actual number of dates read
 c                                as a function of the assets
 c     The function will insert the values in the  
@@ -28,11 +28,12 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 filename
       character*100 line
-      integer i,j,in,jm,ird, IMAX, JMAX
-      real env(IMAX,JMAX)
+      integer i,j,in,jm,ird, IMAX, JMAX, iwr
+      logical ier
+      double precision env(IMAX,JMAX)
       integer date2int
       external date2int
-      common /cfile/ ird
+      common /coutput/ier,iwr, ird
 
 
       if (jm .gt. JMAX) then 
@@ -48,23 +49,22 @@ c read a line as a string
 c
         read(ird,'(A)', err = 20, end=1) line
 c
-c parse the date and save as real YYYYMMDD
+c parse the date and save as double precision YYYYMMDD
 c
-        env(i,1) = real(date2int(line(1:10)))
+        env(i,1) = date2int(line(1:10))
 c
 c parse the values (OHLCD)
 c
         read(line(11:),*, err = 20, end=1) (env(i,j),j=2,jm)
-        write(*,*) line(1:10),date2int(line(1:10)), (env(i,j),j=1,jm)
       enddo
-
-      in = i
+c     remove last index call
+      in = i-1
       call logger('warning', 'data length greater than iMAX')
       close (ird)
       return
-
+c     remove last index call
    1  call logger('info', 'end of file found')
-      in = i 
+      in = i-1 
       close(ird)
       return
 c 

@@ -7,7 +7,7 @@ c          . Volatility
 c          . Sharpe Ratio
 c          . calmar
 c inputs :
-c     prcs: real(n)      : price time series   
+c     prcs: double precision(n)      : price time series   
 c     n  :  integer :size of the input price vector
 c outputs :
 c     return  : total return over the period: 
@@ -18,8 +18,8 @@ c     calmar  : max ret / max drawdown
 
       implicit none
       integer i, n, rets(n)
-      real prcs(n), retrn, vol, sharpe, calmar, rollmaxs(n), dds(n), maxdds(n)
-      real ave, var, yrvolfc, drawdown, dd
+      double precision prcs(n), retrn, vol, sharpe, calmar, rollmaxs(n), dds(n), maxdds(n)
+      double precision ave, var, yrvolfc, drawdown, dd
       external drawdown
 
       parameter(yrvolfc = 15.8745078664)
@@ -55,14 +55,14 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  drawdown.f : function to calculate the max drawdown over a period 
 c   inputs :
-c     data: real(n)      : price time series   
+c     data: double precision(n)      : price time series   
 c     n  :  integer :size of the input price vector
 c outputs :
-c     drawdown  : real : maximum drawdonw over the period
+c     drawdown  : double precision : maximum drawdonw over the period
 
       implicit none
       integer n, i
-      real data(n), rollmax, dd, drawdown
+      double precision data(n), rollmax, dd, drawdown
       rollmax = 0.
       drawdown = 0. 
       do i=1,n
@@ -74,7 +74,7 @@ c     drawdown  : real : maximum drawdonw over the period
 
       end function
 
-      subroutine schedulerisks(sched, riskv, m, prcs, n)
+      subroutine schedulerisks(riskv, schedule, IPERIODS, ipdrs, prcs, n)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c    yearlyrisks.f : subroutine to calculate the risks over a defined schedule 
@@ -83,22 +83,20 @@ c    inputs:
 c     sched : integer(m,3) : schedule for the risk calculations. It is the 
 c                            result of the gen_schedule functions
 c     m     : integer     : number of periods
-c     prcs: real(n) : price time series (or strategy nav)
-c     n : real : size of the time series
+c     prcs: double precision(n) : price time series (or strategy nav)
+c     n : double precision : size of the time series
 c    outpout: 
-c     riskv: real(m,4) : risks matrix : 
+c     riskv: double precision(m,4) : risks matrix : 
 c            rows : for each year : ret, vol, sharpe, calmar
 c    
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer n, m, jret, jvol, jsharpe,jcalmar,ii,il,i,j
-      integer IPERIODS, IMAX, JMAX
-      common /allocation/ IPERIODS, IMAX, JMAX
-      integer sched(IPERIODS,3)
-      real riskv(IPERIODS,4), prcs(n)
+      integer n, ipdrs, jret, jvol, jsharpe,jcalmar,ii,il,i,j
+      integer IPERIODS, sched(IPERIODS,3)
+      double precision riskv(IPERIODS,4), prcs(n)
       parameter(jret=1, jvol=2, jsharpe=3, jcalmar=4)
       j=1
-      do i=1,m
+      do i=1,ipdrs
         ii = sched(i,1)
         il = sched(i,2)
         call risks(riskv(j,jret), riskv(j,jvol), riskv(j,jsharpe), riskv(j,jcalmar), prcs(ii:il), il-ii+1)
@@ -107,35 +105,8 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine    
 
-      subroutine periodrisks(freq, riskv, m, prcs, n)
-c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c
-c    yearlyrisks.f : subroutine to calculate the risks over a period defined as a 
-c           constant step 
-c           The period is 252 trading days (1 year by default)
-c    inputs:
-c     freq : frequency in number of bars (generally days) of the risk calculation
-c     prcs: real(n) : price time series (or strategy nav)
-c     n : real : size of the time series
-c    outpout: 
-c     riskv: real(m,4) : risks matrix : 
-c            rows : for each year : ret, vol, sharpe, calmar
-c    
-c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
-      implicit none
-      integer n, m, jret, jvol, jsharpe,jcalmar,i,freq,nn, j
-      real riskv(m,4), prcs(n)
-      parameter(jret=1, jvol=2, jsharpe=3, jcalmar=4)
-      j=1
-      do i=1,n,freq
-        nn = min(i+freq,n)
-        call risks(riskv(j,jret), riskv(j,jvol), riskv(j,jsharpe), riskv(j,jcalmar), prcs(i:nn), nn-i+1)
-        j = j+1
-      enddo
+      subroutine gen_schedule(freq, ipds, schedule, IPERIODS, dates, in)
 
-      end subroutine
-
-      subroutine gen_schedule(freq, schedule, sdates, ipds, in)
 c  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c 
 c     gen_schedule.f : subroutine to generate a schedule over a list of dates
@@ -143,10 +114,11 @@ c      at different frequencies
 c
 c     input :
 c        freq : char :A,S,Q,M : annual, semi annual, quarter, monthly
-c        sdates : character*10(in) : dates over which the schedule is generated
-c        in  : integer    : length of the dates vector
+c        IPERIODS : number of maxium periods in the schedule
+c        dates : double precision : dates over which the schedule is generated
+c        in  : integer    : length of the dates vector to consider
 c     output:
-c        schedule : integer(iPERIODS,3) : where 
+c        schedule : integer(iPERIODS,3) : where IPERIODS 
 c            schedule(i,1) date index of the start of the period
 c            schedule(i,2) date index of the end of the period
 c            schedule(i,3) last date in format YYYYMMDD as int of the period
@@ -156,28 +128,25 @@ c
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       integer i,y,m,d, yp,ip,j,k,ipds,IPERIODS,in
-      character*10 sdates(1:in)
-      integer date2int
-      character freq
-      external date2int
-      parameter(IPERIODS = 20)
+      double precision dates(1:in)
       integer schedule(IPERIODS, 3)
-
+      character freq
 
       if (freq .ne. 'A') then
-        write (*,*) 'Error only Annual'
+        call logger ('error','Error only Annual')
         return
       end if
-      call date2ymd(yp,m,d, sdates(1))
+      call ddate2ymd(yp,m,d, dates(1))
       ip = 1
       j = 1
       do i=2, in
-        call date2ymd(y,m,d,sdates(i))
+        call ddate2ymd(y,m,d,dates(i))
+        write(*,*) in,i,yp,y,m,d,dates(i)
         if (y .ne. yp) then
 c    do not forget the start of the period is at endofday of the previous date
           schedule(j,1)=max(ip-1,1)
           schedule(j,2)=i
-          schedule(j,3)=date2int(sdates(i))
+          schedule(j,3)=int(dates(i))
           ip=i
           j=j+1
           yp=y
@@ -189,13 +158,11 @@ c ensure last
       if (y .eq. yp) then
         schedule(j,1)=ip-1
         schedule(j,2)=in
-        schedule(j,3)=date2int(sdates(in))
+        schedule(j,3)=int(dates(in))
       end if
       ipds = j
 
       end subroutine
-
-
       
       subroutine diffvector(vs, v1s, v2s, n)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc     
@@ -203,14 +170,14 @@ c
 c     cmprisks.f Function to take the difference between vectors
 c   
 c     inputs:
-c     v1s: real(n) : vector of inputs  
-c     v2s: real(n) : vector of inputs
+c     v1s: double precision(n) : vector of inputs  
+c     v2s: double precision(n) : vector of inputs
 c     output
-c     vs : real(n) : v1s-v2s
+c     vs : double precision(n) : v1s-v2s
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       integer n,i
-      real vs(n), v1s(n), v2s(n)
+      double precision vs(n), v1s(n), v2s(n)
       do i=1,n
         vs(i) = v1s(i)-v2s(i)
       end do
@@ -223,14 +190,14 @@ c
 c     diffmatrix.f Function the element wise different
 c   
 c     inputs:
-c     m1s: real(n,m) : matrix of inputs  
-c     m2s: real(n,m) : matrix of inputs
+c     m1s: double precision(n,m) : matrix of inputs  
+c     m2s: double precision(n,m) : matrix of inputs
 c     output
-c     ms : real(n,m) : m1s-m2s
+c     ms : double precision(n,m) : m1s-m2s
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc       
       implicit none
       integer n,m,i,j
-      real ms(n,m), m1s(n,m), m2s(n,m)
+      double precision ms(n,m), m1s(n,m), m2s(n,m)
       do i=1,n
         do j=1,m
           ms(i,j) = m1s(i,j)-m2s(i,j)

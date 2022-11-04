@@ -1,4 +1,3 @@
-      parameter(irdx=10,iwrx=0)
       parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5,jplog=6)
       parameter(jstema=7, jlgema=8,jtslpema=9)
       parameter(jret=10, jnav=11)

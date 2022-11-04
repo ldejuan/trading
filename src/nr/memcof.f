@@ -1,9 +1,9 @@
       SUBROUTINE memcof(data,n,m,xms,d)  
       INTEGER m,n,MMAX,NMAX  
-      REAL xms,d(m),data(n)  
+      double precision xms,d(m),data(n)  
       PARAMETER (MMAX=60,NMAX=2000)  
       INTEGER i,j,k  
-      REAL denom,p,pneum,wk1(NMAX),wk2(NMAX),wkm(MMAX)  
+      double precision denom,p,pneum,wk1(NMAX),wk2(NMAX),wkm(MMAX)  
       if (m.gt.MMAX.or.n.gt.NMAX) pause 'workspace too small in memcof'
       p=0.  
       do 11 j=1,n  

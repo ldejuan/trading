@@ -1,5 +1,5 @@
       FUNCTION gammln(xx)  
-      REAL gammln,xx  
+      double precision gammln,xx  
       INTEGER j  
       DOUBLE PRECISION ser,stp,tmp,x,y,cof(6)  
       SAVE cof,stp  

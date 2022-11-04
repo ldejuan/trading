@@ -1,4 +1,4 @@
-     subroutine macd(risks, stratrisks, vars, nvars, schedule, iprds, env, in, jm)
+     subroutine macd(risks, stratrisks, vars, nvars, schedule, IPERIODS, iprds, env, IMAX, JMAX, in)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c macd.f
@@ -8,7 +8,7 @@ c version 0.1
 c 
 c    one single simulation of the macd strategy 
 c inputs:
-c     vars: real(nvars) : variables of the strategy
+c     vars: double precision(nvars) : variables of the strategy
 c           vars(isht) : number of day of short 
 c           vars(ilng) : number of days of long
 c     nvars: integer    :  number of variables of the strategy             
@@ -17,32 +17,30 @@ c               schedule(i,1) : start index of the risk period
 c               schedule(i,2) : en index of the risk period
 c               schedule(i,3) : end date of the risk period as YYYYMMDD (int)
 c     nperiods :  number of periods of the schedule
-c     env      : real(imax,jmax,kmax) : flux environment of the index strategy
+c     env      : double precision(imax,jmax,kmax) : flux environment of the index strategy
 c outputs:
-c     risks    : real(nperiods,4) : excess risks over the index
-c     stratrisk:  real(nperiods,4): strategy risks 
+c     risks    : double precision(nperiods,4) : excess risks over the index
+c     stratrisk:  double precision(nperiods,4): strategy risks 
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer in, jm, iprds, nvars, isht, ilng,i, nstart
+      integer in, iprds, nvars, isht, ilng,i, nstart
       integer jopen, jhigh, jlow, jclose,jpdiv, jplog
       integer jstema, jlgema, jtslpema
-      real alphast, alphalg 
+      double precision alphast, alphalg 
       integer jret, jnav
       integer jcrs, jrst, jnavs
       integer IMAX, JMAX, IPERIODS
 
-      integer ird, irdx, iwr, iwrx, ier
-
       include "macd.inc"
-      include "macdallocation.inc"
 
-      integer schedule(IPERIODS,3)
-      real indexrisk(IPERIODS,4), stratrisks(IPERIODS,4), env(IMAX,JMAX)
-      real risks(IPERIODS,4), vars(nvars)
+      double precision env(IMAX,JMAX)
+      integer schedule(IPERIODS,3) 
+      double precision indexrisks(IPERIODS,4), stratrisks(IPERIODS,4),risks(IPERIODS,4) 
+      double precision vars(nvars)
+
       intrinsic alog
-      common /cfile/ ird
-      common /cerror/ iwr,ier
-      real chg,slip
+
+      double precision chg,slip
       data chg /1.e-5/
       data slip /0.0/
 
@@ -70,9 +68,9 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
         enddo
       enddo
 
-      call schedulerisks(schedule, stratrisks,ipdrs,env(1,jnavs),in)
-      call schedulerisks(schedule, indexrisk,ipdrs,env(1,jnav),in)
-      call diffmatrix(risks,stratrisks,indexrisk,ipdrs,4)
+      call schedulerisks(stratrisks, schedule, IPERIODS, ipdrs,env(1,jnavs),in)
+      call schedulerisks(indexrisks, schedule, IPERIODS ,ipdrs,env(1,jnav),in)
+      call diffmatrix(risks,stratrisks,indexrisks, IPERIODS, ipdrs,4)
 
       end subroutine
  
