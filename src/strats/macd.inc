@@ -1,7 +1,7 @@
-      parameter(jopen=1,jhigh=2,jlow=3,jclose=4,jpdiv=5,jplog=6)
-      parameter(jstema=7, jlgema=8,jtslpema=9)
-      parameter(jret=10, jnav=11)
-      parameter(jcrs=12, jrst=13,jnavs=14)
+      parameter(jopen=2,jhigh=3,jlow=4,jclose=5,jpdiv=6,jplog=7)
+      parameter(jstema=8, jlgema=9,jtslpema=10)
+      parameter(jret=11, jnav=12)
+      parameter(jcrs=13, jrst=14,jnavs=15)
       parameter(isht=1, ilng=2)
 
   ! irdx  :  index of I/O file

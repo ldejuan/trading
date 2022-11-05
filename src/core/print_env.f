@@ -131,7 +131,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine print_simul_risks(ird, vars, nv, schedule, risks, stratrisks, n)
+      subroutine print_simul_risks(ird, vars, nv, schedule, risks, stratrisks, IPERIODS, ipds)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to print_simul_risks.f
@@ -149,10 +149,10 @@ c   n        : n          : total number of risk periods to print
 c 
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer ird, nv, n, i, j, schedule(n,3)
-      double precision risks(n,4), vars(nv), stratrisks(n,4)
-      do i=1,n
-        write(ird,*) schedule(i,3), (vars(j), j=1,nv), (risks(i,j), j=1,4),
+      integer ird, nv, ipds, i, j, IPERIODS, schedule(IPERIODS,3)
+      double precision risks(IPERIODS,4), vars(nv), stratrisks(IPERIODS,4)
+      do i=1,ipds
+        write(ird,'(i8,*(F8.3))') schedule(i,3), (vars(j), j=1,nv), (risks(i,j), j=1,4),
      &  (stratrisks(i,j), j=1,4)  
       enddo 
 

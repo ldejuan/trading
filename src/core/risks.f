@@ -17,8 +17,8 @@ c     calmar  : max ret / max drawdown
 
 
       implicit none
-      integer i, n, rets(n)
-      double precision prcs(n), retrn, vol, sharpe, calmar, rollmaxs(n), dds(n), maxdds(n)
+      integer i, n
+      double precision prcs(n), retrn, vol, sharpe, calmar, rets(n), rollmaxs(n), dds(n), maxdds(n)
       double precision ave, var, yrvolfc, drawdown, dd
       external drawdown
 
@@ -91,16 +91,16 @@ c            rows : for each year : ret, vol, sharpe, calmar
 c    
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer n, ipdrs, jret, jvol, jsharpe,jcalmar,ii,il,i,j
-      integer IPERIODS, sched(IPERIODS,3)
-      double precision riskv(IPERIODS,4), prcs(n)
+      integer n, ipdrs, jret, jvol, jsharpe,jcalmar,ii,il,i
+      integer IPERIODS, schedule(IPERIODS,3)
+      double precision riskv(IPERIODS,4), prcs(1:n)
+      double precision dret, dvol,dsharpe,dcalmar
+
       parameter(jret=1, jvol=2, jsharpe=3, jcalmar=4)
-      j=1
       do i=1,ipdrs
-        ii = sched(i,1)
-        il = sched(i,2)
-        call risks(riskv(j,jret), riskv(j,jvol), riskv(j,jsharpe), riskv(j,jcalmar), prcs(ii:il), il-ii+1)
-        j = j+1
+        ii = schedule(i,1)
+        il = schedule(i,2)
+        call risks(riskv(i,jret), riskv(i,jvol), riskv(i,jsharpe), riskv(i,jcalmar), prcs(ii:il), il-ii+1)
       enddo
 
       end subroutine    
@@ -141,7 +141,6 @@ c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       j = 1
       do i=2, in
         call ddate2ymd(y,m,d,dates(i))
-        write(*,*) in,i,yp,y,m,d,dates(i)
         if (y .ne. yp) then
 c    do not forget the start of the period is at endofday of the previous date
           schedule(j,1)=max(ip-1,1)
@@ -184,20 +183,21 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine diffmatrix(ms, m1s, m2s, n, m)
+      subroutine diffmatrix(ms, m1s, m2s, imax, jmax, n, m)
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc     
 c   
-c     diffmatrix.f Function the element wise different
+c     diffmatrix.f Function the element wise different of a matrix of size imax,jmax
+c      over a submatrix of size (1:n, 1:m)
 c   
 c     inputs:
-c     m1s: double precision(n,m) : matrix of inputs  
-c     m2s: double precision(n,m) : matrix of inputs
+c     m1s: double precision(imax,jmax) : matrix of inputs  
+c     m2s: double precision(imax,jmax) : matrix of inputs
 c     output
-c     ms : double precision(n,m) : m1s-m2s
+c     ms : double precision(imax,jmax) : m1s-m2s
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc       
       implicit none
-      integer n,m,i,j
-      double precision ms(n,m), m1s(n,m), m2s(n,m)
+      integer n,m,i,j, imax, jmax
+      double precision ms(imax,jmax), m1s(imax,jmax), m2s(imax,jmax)
       do i=1,n
         do j=1,m
           ms(i,j) = m1s(i,j)-m2s(i,j)

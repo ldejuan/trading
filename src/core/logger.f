@@ -14,7 +14,8 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
 
       character*(*) text
-      character*10 level,stime
+      character*(5) level 
+      character*10 stime
       character*8 sdate
       integer h,n,s,mm
 
@@ -25,7 +26,8 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       
       ier = .TRUE.
       call date_and_time ( sdate, stime )
-      write(iwr,'(*(a))') '[',sdate,' ', stime(1:2),'h', stime(3:4),'m',stime(5:), ']', level,' ', text
+
+      write(iwr,'(*(a))') sdate,' ', stime(1:2),'h', stime(3:4),'m',stime(5:),' [', trim(level),'] ', trim(text)
       return
 
       end subroutine

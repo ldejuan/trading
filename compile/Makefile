@@ -13,7 +13,7 @@ NRPATH = ${HOME}/trading/src/nr
 COREOBJ = load_asset.o logger.o ema.o print_env.o \
 	 ret.o rebase.o indcross.o retcond.o logret.o rollma.o unaries.o \
 	 unary.o binary.o detrend.o aliasing.o vol.o indchannelbreak.o \
-	 movmax.o movmin.o indmacd.o risks.o, macd.o
+	 movmax.o movmin.o indmacd.o risks.o
 
 NROBJ = gammln.o memcof.o evlmem.o avevar.o datetime.o
 

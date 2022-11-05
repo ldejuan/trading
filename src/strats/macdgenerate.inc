@@ -1,7 +1,7 @@
       parameter(IMAX=10000, JMAX=20, IPERIODS=40, jm=6,irdx=10,iwrx=6)
       parameter(jdate=1)
       parameter(ishort=10, fshort=50, dshort=5)
-      parameter(ilong=60, flong=260, dlong=10)
+      parameter(ilong=60, flong=250, dlong=10)
       parameter(nvars=2)
 
   ! IMAX        : is the number of bars in the market data
