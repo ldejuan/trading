@@ -11,3 +11,11 @@ services:
                 limits:
                     cpus: '0.25'
                     memory: '100m'
+    analysis:
+        image: python:3.9.15
+        container_name: analysis
+        command: /bin/bash
+        volumes: 
+            - /mnt/c/Users/ldejuan/work/aaData/home:/root
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/inputdir:/inputdir
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/outputdir:/outputdir

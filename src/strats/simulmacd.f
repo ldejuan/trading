@@ -11,14 +11,14 @@ c inputs:
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
       character*80 assetfilename /'../data/cac40_index.csv'/
-      integer i,j,IMAX,JMAX,in,jm,IPERIODS, ipds
+      integer i,j,IMAX,JMAX,in,jm,IPERIODS, ipds,id
       integer jdate, ishort, fshort, dshort, ilong, flong, dlong
       integer nvars
-      character*15 headers(11)
+      character*15 headers(12)
       integer ird, irdx, iwr, iwrx
       logical ier
 
-      data headers /'date', 'short','long', 'spread_return', 'spread_vol',
+      data headers /'id', 'date', 'short','long', 'spread_return', 'spread_vol',
      & 'spread_sharpe', 'spread_calmar', 'return', 'vol', 'sharpe', 'calmar' /
 
       include "macdgenerate.inc"
@@ -41,13 +41,14 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       open(ird, file='simul_macd.csv') 
       write(ird,*) (headers(i), i=1,11)
-
+      id = 1
       do i=ishort, fshort, dshort
         do j=ilong,flong, dlong
           vars(1) = real(i,8)
           vars(2) = real(j,8)
           call macd(excessrisks, stratrisks, vars, nvars, schedule, IPERIODS, ipds, env, IMAX, JMAX, in)
-          call print_simul_risks(ird, vars, nvars, schedule, excessrisks, stratrisks, IPERIODS, ipds)
+          call print_simul_risks(ird, id, vars, nvars, schedule, excessrisks, stratrisks, IPERIODS, ipds)
+          id = id + 1
         end do
       end do
 

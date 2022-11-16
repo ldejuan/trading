@@ -131,15 +131,16 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine print_simul_risks(ird, vars, nv, schedule, risks, stratrisks, IPERIODS, ipds)
+      subroutine print_simul_risks(ird, id, vars, nv, schedule, risks, stratrisks, IPERIODS, ipds)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to print_simul_risks.f
 c
 c  This function will print of the risk matrix over a period
 c
-c input 
+c input
 c   ird      : integer          : index of the I/O to write to
+c   id       : integer          : id of the simulation
 c   vars     : double precision(nv)      : parameters  of the simulation
 c   nv       : integer          : size of the vars vector
 c   schedule : integer          : schedule of the risks
@@ -149,10 +150,10 @@ c   n        : n          : total number of risk periods to print
 c 
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer ird, nv, ipds, i, j, IPERIODS, schedule(IPERIODS,3)
+      integer ird, nv, ipds, id, i, j, IPERIODS, schedule(IPERIODS,3)
       double precision risks(IPERIODS,4), vars(nv), stratrisks(IPERIODS,4)
       do i=1,ipds
-        write(ird,'(i8,*(F8.3))') schedule(i,3), (vars(j), j=1,nv), (risks(i,j), j=1,4),
+        write(ird,'(i4,i12,*(F8.3))') id, schedule(i,3), (vars(j), j=1,nv), (risks(i,j), j=1,4),
      &  (stratrisks(i,j), j=1,4)  
       enddo 
 
