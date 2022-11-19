@@ -12,7 +12,7 @@ services:
                     cpus: '0.25'
                     memory: '100m'
     analysis:
-        image: python:3.9.15
+        image: analysis:0.1
         container_name: analysis
         command: /bin/bash
         volumes: 

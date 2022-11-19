@@ -45,4 +45,17 @@ c
       rate = y/x - 1.
       return
       end function
+
+      function half(x,y)
+c
+c     calculates half price (x+y)/2
+c      input : x second order moment
+c              y mean value
+c
+      implicit none
+      double precision x,y,half
+      half = 0.5*(x+y)
+
+      return
+      end function
       

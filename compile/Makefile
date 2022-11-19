@@ -5,15 +5,16 @@ CFLAGS = -Ae $(EXTRA)
 FC      = gfortran -std=legacy -ffixed-line-length-none -ffpe-summary=none $(FFLAGS)
 CC      = cc $(CFLAGS)
 
-COREPATH = ${HOME}/trading/src/core
-STGYPATH = ${HOME}/trading/src/strats
-APPPATH = ${HOME}/trading/app
-NRPATH = ${HOME}/trading/src/nr
+
+COREPATH = ${HOME}/strategies/trading/src/core
+STGYPATH = ${HOME}/strategies/trading/src/strats
+APPPATH = ${HOME}/strategies/trading/app
+NRPATH = ${HOME}/strategies/trading/src/nr
 
 COREOBJ = load_asset.o logger.o ema.o print_env.o \
-	 ret.o rebase.o indcross.o retcond.o logret.o rollma.o unaries.o \
+	 ret.o rebase.o indcross.o retcond.o logret.o ma.o unaries.o \
 	 unary.o binary.o detrend.o aliasing.o vol.o indchannelbreak.o \
-	 movmax.o movmin.o indmacd.o risks.o
+	 movmax.o movmin.o indmacd.o risks.o binaries.o
 
 NROBJ = gammln.o memcof.o evlmem.o avevar.o datetime.o
 
@@ -63,4 +64,5 @@ test: $(COREOBJ) $(NROBJ) test.o
 clean:
 	rm -f *.o
 
-
+debug: 
+	@echo ${HOME}
