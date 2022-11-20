@@ -6,6 +6,7 @@ services:
         command: /bin/bash
         volumes:
             - /mnt/c/Users/ldejuan/work/aaData/home:/root
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/inputdir:/outputdir
         deploy:
             resources:
                 limits:
