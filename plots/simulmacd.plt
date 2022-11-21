@@ -7,7 +7,6 @@ unset ytics
 set multiplot layout 3,1 title "MACD CAC-40\n" font ",12"
 set key autotitle column nobox samplen 1 noenhanced
 unset title
-set xrange ["01/01/2020":"13/09/2022"]
 set xdata time
 set autoscale y
 set grid
@@ -15,12 +14,12 @@ set ytics
 set xtics
 
 set format x ""
-plot '..\app\simulmacd.out' using 2:3:4:5:6 with financebars lt 8 title 'cac-index' ,\
-	'..\app\simulmacd.out' using 2:8 with lines title 'ema Long',\
-	'..\app\simulmacd.out' using 2:9 with lines title 'ema short'
+plot 'C:\Users\ldejuan\work\aaDATA\home\data\analysis\inputdir\simul_onemacd.csv'using 1:2:3:4:5 with financebars lt 8 title 'cac-index' ,\
+	'C:\Users\ldejuan\work\aaDATA\home\data\analysis\inputdir\simul_onemacd.csv' using 1:9 with lines title 'short',\
+	'C:\Users\ldejuan\work\aaDATA\home\data\analysis\inputdir\simul_onemacd.csv' using 1:10 with lines title 'long'
 
-set format x "%d/%m/%Y"
-plot '..\app\simulmacd.out' using 2:12 with lines title 'index',\
-	'..\app\simulmacd.out' using 2:15 with lines title 'strategy'
+set format x "%Y%m%d"
+plot 'C:\Users\ldejuan\work\aaDATA\home\data\analysis\inputdir\simul_onemacd.csv'using 13 with lines title 'index',\
+	'C:\Users\ldejuan\work\aaDATA\home\data\analysis\inputdir\simul_onemacd.csv' using 16 with lines title 'strategy'
 
 

@@ -14,7 +14,7 @@ NRPATH = ${HOME}/strategies/trading/src/nr
 COREOBJ = load_asset.o logger.o ema.o print_env.o \
 	 ret.o rebase.o indcross.o retcond.o logret.o ma.o unaries.o \
 	 unary.o binary.o detrend.o aliasing.o vol.o indchannelbreak.o \
-	 movmax.o movmin.o indmacd.o risks.o binaries.o firstorder.o
+	 movmax.o movmin.o indmacd.o risks.o binaries.o firstorder.o macd.o
 
 NROBJ = gammln.o memcof.o evlmem.o avevar.o datetime.o
 
@@ -40,6 +40,9 @@ simulchannel.o: $(STGYPATH)/simulchannel.f $(STGYPATH)/simulchannel.inc
 simulmacd.o: $(STGYPATH)/simulmacd.f $(STGYPATH)/simulmacd.inc
 	$(FC) $(FFLAGS) -c $<
 
+onemacd.o: $(STGYPATH)/onemacd.f $(STGYPATH)/onemacd.inc
+	$(FC) $(FFLAGS) -c $<
+
 blockchannel.o: $(STGYPATH)/blockchannel.f $(STGYPATH)/blockchannel.inc
 	$(FC) $(FFLAGS) -c $<
 
@@ -57,6 +60,9 @@ blockchannel: $(COREOBJ) $(NROBJ) blockchannel.o
 
 simulmacd: $(COREOBJ) $(NROBJ) simulmacd.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) simulmacd.o -o $(APPPATH)/simulmacd -lm
+
+onemacd: $(COREOBJ) $(NROBJ) onemacd.o
+	 $(FC)  $(COREOBJ)  $(NROBJ) onemacd.o -o $(APPPATH)/onemacd -lm
 
 test: $(COREOBJ) $(NROBJ) test.o
 	 $(FC)  $(COREOBJ)  $(NROBJ) test.o -o $(APPPATH)/test -lm

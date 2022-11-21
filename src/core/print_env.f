@@ -61,7 +61,7 @@ c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       end subroutine
 
-      subroutine print_env_headers(ird, env, dates,ix,jx,kx, headers, jheaderx)
+      subroutine print_env_headers(ird,env, IMAX,JMAX,in, headers, jm)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c  subrouutine to print_env.f
@@ -71,37 +71,23 @@ c  open filename
 c
 c input 
 c   ird      : integer      : index of the I/O to write to 
-c   env      : double precision(ix,jx,kx): the simulation outputd
-c   dates    : character*10 (ix,kx))  : dates for each assets/bars
-c   ix       : integer      : number of rows in env 
-c   jx       : integer      : number of proprietes in env:
-c   kx       : integer      : number of assets to outputs
-c   headers  : character*15 (jheaders) : headers to print
-c   jheaders : integer      : total numbe of headers 
-
-c       / ird  : unit to read file
-c output :
-c    env      : double precision(nn,mm,kx)         : env variable for the simulation
-c    dates    : character(nn,kx)*10    : dates for the simulation
-c                                as a function of the assets
-c     The function will insert the values in the  
-c       env(i,j,kk)
-c       dates(i,kk)
+c   env      : double precision(iMAX,jMAX): the simulation outputd
+c   in       : integer      : lenght of the output strategy (in<IMAX)
+c   jm       : integer      : number of proprietes in env:
+c   headers  : character*15 (jm) : headers to print
 c
+c  '(*(a15,","))' '(i4,i12,*(F8.3))'
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit none
-      integer ird,ix,jx,kx,i,j,k,jheaderx
-      double precision env(ix,jx,kx)
-      character dates(ix,kx)*10
-      character*15 headers(jheaderx)
+      integer ird,IMAX,JMAX,in,jm,j,i
+      double precision env(1:IMAX,1:JMAX)
+      character*15 headers(jm)
 
-      write(ird,'(*(a15,","))') (headers(j), j=1, jheaderx)
+      write(ird,*) (headers(j), j=1, jm)
 
-      do k=1,kx
-        do i=1,ix
-          write(ird,*) i,dates(i,k),(env(i,j,k),j=1,jx)
+      do i=1,in
+          write(ird,'(I10,*(F10.3))') int(env(i,1)), (env(i,j),j=2,jm)
         enddo
-      enddo
 
       end subroutine
 
