@@ -9,5 +9,6 @@ The directory **./src/strats** contains the definitions of the strategies develo
 The directory **./src/core** contains the definitions of the core indicators (librairies)
 
 The app is compiled via a docker fortran images
+to run with service ports docker-compose run --service-ports analysis
 
 
