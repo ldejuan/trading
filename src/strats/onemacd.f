@@ -12,7 +12,7 @@ c  simulchannel.inc for parameters
 c  assetfilename : name of the file to open
 c  
 c ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-      character*80 assetfilename /'../data/cac40_index.csv'/
+      character*80 assetfilename /'/inputdir/cac40_index.csv'/
       integer i,j,IMAX,JMAX,in,jm,IPERIODS, ipds,id
       integer jdate, ishort, fshort, dshort, ilong, flong, dlong
       integer nvars

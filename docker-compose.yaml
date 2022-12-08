@@ -6,7 +6,8 @@ services:
         command: /bin/bash
         volumes:
             - /mnt/c/Users/ldejuan/work/aaData/home:/root
-            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/inputdir:/outputdir
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/strategies/analysis/inputdir:/outputdir
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/strategies/trading/marketdata:/inputdir
         deploy:
             resources:
                 limits:
@@ -18,8 +19,8 @@ services:
         command: /bin/bash
         volumes: 
             - /mnt/c/Users/ldejuan/work/aaData/home:/root
-            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/inputdir:/inputdir
-            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/outputdir:/outputdir
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/strategies/analysis/inputdir:/inputdir
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/strategies/analysis/outputdir:/outputdir
 
     jupyter:
         image: analysis:0.1
@@ -27,7 +28,15 @@ services:
         command: jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/root --no-browser
         volumes: 
             - /mnt/c/Users/ldejuan/work/aaData/home/strategies/analysis:/root
-            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/inputdir:/inputdir
-            - /mnt/c/Users/ldejuan/work/aaData/home/data/analysis/outputdir:/outputdir
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/strategies/analysis/nputdir:/inputdir
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/strategies/analysis/outputdir:/outputdir
         ports:
             - 8888:8888
+            
+    onemacd:
+        image: onemacd:0.1
+        container_name: onemacd
+        command: /onemacd
+        volumes:
+            - /mnt/c/Users/ldejuan/work/aaData/home/data/strategies/analysis/inputdir:/outputdir
+            - /mnt/c/Users/ldejuan/work/aaDATA/home/data/strategies/trading/marketdata:/inputdir
